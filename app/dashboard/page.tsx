@@ -8,12 +8,13 @@ import { ChartAreaInteractive } from "@/app/components/ui/chart-area-interactive
 import { 
   Clock, 
   Package, 
-  Zap, 
   TrendingUp,
   AlertTriangle,
   CheckCircle,
-  DollarSign,
-  ShoppingCart
+  BarChart3,
+  ShoppingCart,
+  Settings,
+  Target
 } from "lucide-react";
 import { inventoryService } from "@/lib/services/inventory";
 
@@ -24,7 +25,7 @@ export default function Dashboard() {
   
   return (
     <MainLayout>
-      <div className="space-y-6" style={{ background: '#ffffff', minHeight: '100vh', padding: '2rem' }}>
+            <div className="space-y-6" style={{ background: '#ffffff', minHeight: '100vh', padding: '2rem' }}>
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -37,10 +38,10 @@ export default function Dashboard() {
           {/* System Status */}
           <div className="flex items-center space-x-3 bg-muted/50 rounded-lg px-4 py-3">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4 text-black" />
               <span className="text-sm font-medium">System Active</span>
             </div>
-            <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+            <Badge variant="secondary" className="text-black text-xs" style={{ backgroundColor: '#fef3c7' }}>
               Live
             </Badge>
             <div className="text-xs text-muted-foreground">
@@ -52,66 +53,52 @@ export default function Dashboard() {
         {/* Revenue Impact Cards */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Today's Revenue Impact */}
-          <Card className="border-purple-100" style={{ background: 'linear-gradient(to bottom right, #fefbff, #e9d5ff)' }}>
+          <Card className="border-gray-200" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)' }}>
             <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-purple-900">Today's Revenue Impact</h3>
-                    <p className="text-sm text-purple-700">Smart pricing vs regular pricing</p>
-                  </div>
+              <div className="text-center mb-4">
+                <div className="flex items-center justify-center space-x-3 mb-2">
+                  <BarChart3 className="w-5 h-5 text-black" />
+                  <h3 className="text-lg font-semibold text-black">Today's Revenue Impact</h3>
                 </div>
-                <Badge className="bg-amber-600 text-white text-sm px-3 py-1">
-                  +$487
-                </Badge>
+                <p className="text-sm text-black">Smart pricing vs regular pricing</p>
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-purple-800 font-medium">Additional Revenue</span>
-                  <span className="text-2xl font-bold text-purple-900">$487</span>
+                  <span className="text-black font-medium">Additional Revenue</span>
+                  <span className="text-2xl font-bold text-black">$487</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-purple-700">From smart pricing today</span>
-                  <span className="text-amber-600 font-medium">+23% increase</span>
+                  <span className="text-black">From smart pricing today</span>
+                  <span className="text-black font-medium">+23% increase</span>
                 </div>
-                <div className="w-full bg-amber-200 rounded-full h-2">
-                  <div className="bg-amber-600 h-2 rounded-full" style={{ width: '23%' }}></div>
+                <div className="w-full rounded-full h-2" style={{ backgroundColor: '#e6eaf7' }}>
+                  <div className="h-2 rounded-full" style={{ width: '23%', backgroundColor: '#2c4170' }}></div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Monthly Projection */}
-          <Card className="border-purple-100" style={{ background: 'linear-gradient(to bottom right, #fefbff, #e9d5ff)' }}>
+          <Card className="border-gray-200" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)' }}>
             <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-purple-900">Monthly Projection</h3>
-                    <p className="text-sm text-purple-700">Based on current performance</p>
-                  </div>
+              <div className="text-center mb-4">
+                <div className="flex items-center justify-center space-x-3 mb-2">
+                  <Target className="w-5 h-5 text-black" />
+                  <h3 className="text-lg font-semibold text-black">Monthly Projection</h3>
                 </div>
-                <Badge className="bg-amber-600 text-white text-sm px-3 py-1">
-                  +$14,610
-                </Badge>
+                <p className="text-sm text-black">Based on current performance</p>
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-purple-800 font-medium">Extra Monthly Revenue</span>
-                  <span className="text-2xl font-bold text-purple-900">$14,610</span>
+                  <span className="text-black font-medium">Extra Monthly Revenue</span>
+                  <span className="text-2xl font-bold text-black">$14,610</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-purple-700">Projected from today's data</span>
-                  <span className="text-amber-600 font-medium">+$4,870/week</span>
+                  <span className="text-black">Projected from today's data</span>
+                  <span className="text-black font-medium">+$4,870/week</span>
                 </div>
-                <div className="w-full bg-amber-200 rounded-full h-2">
-                  <div className="bg-amber-600 h-2 rounded-full" style={{ width: '78%' }}></div>
+                <div className="w-full rounded-full h-2" style={{ backgroundColor: '#e6eaf7' }}>
+                  <div className="h-2 rounded-full" style={{ width: '78%', backgroundColor: '#2c4170' }}></div>
                 </div>
               </div>
             </CardContent>
@@ -121,48 +108,48 @@ export default function Dashboard() {
         {/* Core Features Overview */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Smart Pricing */}
-          <Card style={{ background: 'linear-gradient(to bottom right, #fefbff, #e9d5ff)' }}>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Zap className="h-5 w-5 text-purple-800" />
-                <span className="text-purple-900">Smart Pricing</span>
+          <Card style={{ background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)' }}>
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center space-x-2 mb-2">
+                <Settings className="h-5 w-5 text-black" />
+                <span className="text-black">Smart Pricing</span>
               </CardTitle>
               <CardDescription>
-                AI-powered pricing based on peak hours and inventory levels
+                AI-powered pricing optimization
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-purple-100 rounded-lg">
-                  <Clock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-700">+23%</div>
-                  <p className="text-sm text-muted-foreground">Peak Hour Revenue</p>
+                <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#e6eaf7' }}>
+                  <Clock className="h-6 w-6 text-black mx-auto mb-1" />
+                  <div className="text-xl font-bold text-black">+23%</div>
+                  <p className="text-xs text-muted-foreground">Peak Hour Revenue</p>
                 </div>
-                <div className="text-center p-4 bg-purple-100 rounded-lg">
-                  <TrendingUp className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-700">-15%</div>
-                  <p className="text-sm text-muted-foreground">Waste Prevention</p>
+                <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#e6eaf7' }}>
+                  <TrendingUp className="h-6 w-6 text-black mx-auto mb-1" />
+                  <div className="text-xl font-bold text-black">-15%</div>
+                  <p className="text-xs text-muted-foreground">Waste Prevention</p>
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span>Current Peak Pricing</span>
-                  <Badge className="bg-purple-200 text-purple-800">Active</Badge>
+                  <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>Active</Badge>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span>Waste Prevention</span>
-                  <Badge className="bg-purple-200 text-purple-800">3 items</Badge>
+                  <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>3 items</Badge>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Inventory Management */}
-          <Card style={{ background: 'linear-gradient(to bottom right, #fefbff, #e9d5ff)' }}>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Package className="h-5 w-5 text-purple-800" />
-                <span className="text-purple-900">Inventory Management</span>
+          <Card style={{ background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)' }}>
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center space-x-2 mb-2">
+                <Package className="h-5 w-5 text-black" />
+                <span className="text-black">Inventory Management</span>
               </CardTitle>
               <CardDescription>
                 Automated tracking and reordering of ingredients
@@ -170,25 +157,25 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-purple-100 rounded-lg">
-                  <Package className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-700">{inventoryStatus.totalIngredients}</div>
-                  <p className="text-sm text-muted-foreground">Ingredients Tracked</p>
+                <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#e6eaf7' }}>
+                  <Package className="h-6 w-6 text-black mx-auto mb-1" />
+                  <div className="text-xl font-bold text-black">{inventoryStatus.totalIngredients}</div>
+                  <p className="text-xs text-muted-foreground">Ingredients Tracked</p>
                 </div>
-                <div className="text-center p-4 bg-purple-100 rounded-lg">
-                  <AlertTriangle className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-700">{inventoryStatus.lowStockItems}</div>
-                  <p className="text-sm text-muted-foreground">Low Stock</p>
+                <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#e6eaf7' }}>
+                  <AlertTriangle className="h-6 w-6 text-black mx-auto mb-1" />
+                  <div className="text-xl font-bold text-black">{inventoryStatus.lowStockItems}</div>
+                  <p className="text-xs text-muted-foreground">Low Stock</p>
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span>Auto Reordering</span>
-                  <Badge className="bg-purple-200 text-purple-800">Enabled</Badge>
+                  <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>Enabled</Badge>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span>Reorder Suggestions</span>
-                  <Badge className="bg-purple-200 text-purple-800">
+                  <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
                     {reorderSuggestions.length} items
                   </Badge>
                 </div>
@@ -198,48 +185,15 @@ export default function Dashboard() {
         </div>
 
         {/* Revenue Comparison Chart */}
-        <div style={{ background: 'linear-gradient(to bottom right, #fefbff, #e9d5ff)', borderRadius: '0.75rem', padding: '1.5rem' }}>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-purple-900">Revenue Comparison</h3>
-            <p className="text-sm text-purple-700">
-              Smart pricing vs regular pricing performance over time
-            </p>
-          </div>
-          <ChartAreaInteractive />
-        </div>
+        <ChartAreaInteractive />
 
-        {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>
-              Manage your smart pricing and inventory
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
-              <Button variant="outline" className="h-20 flex flex-col space-y-2">
-                <Package className="h-6 w-6" />
-                <span>View Products</span>
-              </Button>
-              <Button variant="outline" className="h-20 flex flex-col space-y-2">
-                <ShoppingCart className="h-6 w-6" />
-                <span>Reorder Items</span>
-              </Button>
-              <Button variant="outline" className="h-20 flex flex-col space-y-2">
-                <Zap className="h-6 w-6" />
-                <span>Pricing Settings</span>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Recent Activity */}
         {reorderSuggestions.length > 0 && (
-          <Card>
+          <Card style={{ background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)' }}>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <AlertTriangle className="h-5 w-5 text-amber-600" />
+                <AlertTriangle className="h-5 w-5 text-black" />
                 <span>Reorder Needed</span>
               </CardTitle>
               <CardDescription>
@@ -262,11 +216,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Badge className={
-                        suggestion.urgency === 'critical' ? 'bg-red-100 text-red-800' :
-                        suggestion.urgency === 'high' ? 'bg-orange-100 text-purple-800' :
-                        'bg-yellow-100 text-purple-800'
-                      }>
+                      <Badge className="text-black" style={{ backgroundColor: '#fef3c7' }}>
                         {suggestion.urgency}
                       </Badge>
                       <Button size="sm">

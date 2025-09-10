@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react";
 import { MainLayout } from "@/app/components/main-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
@@ -16,12 +17,31 @@ import {
   TrendingUp,
   TrendingDown
 } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/app/components/ui/dialog";
+import { Label } from "@/app/components/ui/label";
+import { Switch } from "@/app/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { inventoryService } from "@/lib/services/inventory";
 
 export default function Products() {
+  // State for peak hour settings
+  const [peakHourSettings, setPeakHourSettings] = React.useState<{[key: string]: {
+    enabled: boolean;
+    startTime: string;
+    endTime: string;
+  }}>({});
+
   // Calculate waste prevention pricing for each product
   const getWastePreventionPricing = (productId: string) => {
     return inventoryService.getWastePreventionPricing(productId.toString());
+  };
+
+  // Handle peak hour settings update
+  const updatePeakHourSettings = (productId: string, settings: {enabled: boolean, startTime: string, endTime: string}) => {
+    setPeakHourSettings(prev => ({
+      ...prev,
+      [productId]: settings
+    }));
   };
 
   const products = [
@@ -101,10 +121,10 @@ export default function Products() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-green-100 text-green-800";
-      case "low": return "bg-yellow-100 text-yellow-800";
-      case "out": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "active": return "text-black";
+      case "low": return "text-black";
+      case "out": return "text-black";
+      default: return "text-black";
     }
   };
 
@@ -131,24 +151,24 @@ export default function Products() {
         </div>
 
         {/* Peak Hour Status */}
-        <Card className="border-blue-200 bg-blue-50">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Clock className="h-5 w-5 text-blue-600" />
+              <Clock className="h-5 w-5 text-black" />
               <div>
-                <p className="font-medium text-blue-900">
+                <p className="font-medium text-black">
                   {isPeakHour() ? "Peak Hours Active" : "Off-Peak Hours"}
                 </p>
-                <p className="text-sm text-blue-700">
+                <p className="text-sm text-black">
                   {isPeakHour() 
                     ? "Prices are automatically increased during high-demand periods" 
                     : "Standard pricing is currently active"
                   }
                 </p>
               </div>
-              <Badge className={isPeakHour() ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"}>
-                {isPeakHour() ? "Peak" : "Off-Peak"}
-              </Badge>
+                  <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
+                    {isPeakHour() ? "Peak" : "Off-Peak"}
+                  </Badge>
             </div>
           </CardContent>
         </Card>
@@ -172,7 +192,7 @@ export default function Products() {
                       <span>{product.category}</span>
                     </CardDescription>
                   </div>
-                  <Badge className={getStatusColor(product.status)}>
+                  <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
                     {product.status}
                   </Badge>
                 </div>
@@ -195,18 +215,9 @@ export default function Products() {
                     <span>Peak Price</span>
                     <span className="flex items-center space-x-1">
                       <span>${product.peakPrice}</span>
-                      {isPeakHour() && <TrendingUp className="w-3 h-3 text-blue-600" />}
+                      {isPeakHour() && <TrendingUp className="w-3 h-3 text-black" />}
                     </span>
                   </div>
-                  {product.wastePrevention > 0 && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="flex items-center space-x-1">
-                        <Zap className="w-3 h-3 text-orange-600" />
-                        <span>Waste Prevention</span>
-                      </span>
-                      <span className="text-orange-600">-{product.wastePrevention}%</span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Inventory Status */}
@@ -216,17 +227,17 @@ export default function Products() {
                     <div className="flex items-center space-x-1">
                       <span className="text-sm font-medium">{product.inventory}</span>
                       {product.inventory < 15 && (
-                        <AlertCircle className="w-3 h-3 text-yellow-600" />
+                        <AlertCircle className="w-3 h-3 text-black" />
                       )}
                     </div>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-2">
+                  <div className="w-full rounded-full h-2" style={{ backgroundColor: '#e6eaf7' }}>
                     <div 
-                      className={`h-2 rounded-full ${
-                        product.inventory < 10 ? 'bg-red-500' : 
-                        product.inventory < 20 ? 'bg-yellow-500' : 'bg-green-500'
-                      }`}
-                      style={{ width: `${Math.min((product.inventory / 50) * 100, 100)}%` }}
+                      className="h-2 rounded-full"
+                      style={{ 
+                        width: `${Math.min((product.inventory / 50) * 100, 100)}%`,
+                        backgroundColor: '#2c4170'
+                      }}
                     />
                   </div>
                 </div>
@@ -238,6 +249,105 @@ export default function Products() {
 
                 {/* Actions */}
                 <div className="flex space-x-2">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Clock className="w-4 h-4 mr-2" />
+                        Peak Hours
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Peak Hour Settings - {product.name}</DialogTitle>
+                        <DialogDescription>
+                          Configure when peak hour pricing should be active for this product.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="peak-enabled" className="text-sm font-medium">
+                            Enable Peak Hour Pricing
+                          </Label>
+                          <Switch
+                            id="peak-enabled"
+                            checked={peakHourSettings[product.id]?.enabled || false}
+                            onCheckedChange={(checked) => 
+                              updatePeakHourSettings(product.id, {
+                                ...peakHourSettings[product.id],
+                                enabled: checked,
+                                startTime: peakHourSettings[product.id]?.startTime || "07:00",
+                                endTime: peakHourSettings[product.id]?.endTime || "09:00"
+                              })
+                            }
+                          />
+                        </div>
+                        {peakHourSettings[product.id]?.enabled && (
+                          <>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="start-time">Start Time</Label>
+                                <Select
+                                  value={peakHourSettings[product.id]?.startTime || "07:00"}
+                                  onValueChange={(value) => 
+                                    updatePeakHourSettings(product.id, {
+                                      ...peakHourSettings[product.id],
+                                      startTime: value
+                                    })
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {Array.from({length: 24}, (_, i) => {
+                                      const hour = i.toString().padStart(2, '0');
+                                      return (
+                                        <SelectItem key={`${hour}:00`} value={`${hour}:00`}>
+                                          {hour}:00
+                                        </SelectItem>
+                                      );
+                                    })}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="end-time">End Time</Label>
+                                <Select
+                                  value={peakHourSettings[product.id]?.endTime || "09:00"}
+                                  onValueChange={(value) => 
+                                    updatePeakHourSettings(product.id, {
+                                      ...peakHourSettings[product.id],
+                                      endTime: value
+                                    })
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {Array.from({length: 24}, (_, i) => {
+                                      const hour = i.toString().padStart(2, '0');
+                                      return (
+                                        <SelectItem key={`${hour}:00`} value={`${hour}:00`}>
+                                          {hour}:00
+                                        </SelectItem>
+                                      );
+                                    })}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              Peak pricing: ${product.peakPrice} (vs ${product.basePrice} base)
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Save Changes</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                   <Button variant="outline" size="sm" className="flex-1">
                     <Settings className="w-4 h-4 mr-2" />
                     Settings

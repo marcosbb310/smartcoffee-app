@@ -36,31 +36,31 @@ export default function POSIntegration() {
               Connect your POS system to enable smart pricing and inventory tracking
             </p>
           </div>
-          <Badge className="bg-green-100 text-green-800">
+          <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
             <CheckCircle className="w-4 h-4 mr-1" />
             Connected
           </Badge>
         </div>
 
         {/* Connection Status */}
-        <Card className="border-green-200 bg-green-50">
+        <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#e6eaf7' }}>
+                  <CheckCircle className="w-8 h-8 text-black" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-green-800">POS System Connected</h3>
-                  <p className="text-green-700">Toast POS - Live sync active</p>
+                  <h3 className="text-2xl font-bold text-black">POS System Connected</h3>
+                  <p className="text-black">Toast POS - Live sync active</p>
                   <div className="flex items-center gap-4 mt-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-green-600">Real-time sync</span>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2c4170' }}></div>
+                      <span className="text-sm text-black">Real-time sync</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm text-blue-600">47 products synced</span>
+                      <Activity className="w-4 h-4 text-black" />
+                      <span className="text-sm text-black">47 products synced</span>
                     </div>
                   </div>
                 </div>
@@ -96,8 +96,8 @@ export default function POSIntegration() {
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
                     <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <span className="text-orange-600 font-bold text-lg">T</span>
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e6eaf7' }}>
+                        <span className="text-black font-bold text-lg">T</span>
                       </div>
                       <div>
                         <h3 className="font-semibold">Toast</h3>
@@ -105,15 +105,15 @@ export default function POSIntegration() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <Badge className="bg-green-100 text-green-800">Connected</Badge>
+                      <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>Connected</Badge>
                       <Button size="sm" variant="outline">Configure</Button>
                     </div>
                   </div>
 
                   <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
                     <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <span className="text-blue-600 font-bold text-lg">S</span>
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e6eaf7' }}>
+                        <span className="text-black font-bold text-lg">S</span>
                       </div>
                       <div>
                         <h3 className="font-semibold">Square</h3>
@@ -121,15 +121,15 @@ export default function POSIntegration() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <Badge variant="secondary">Available</Badge>
+                      <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>Available</Badge>
                       <Button size="sm" variant="outline">Connect</Button>
                     </div>
                   </div>
 
                   <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
                     <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <span className="text-purple-600 font-bold text-lg">C</span>
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e6eaf7' }}>
+                        <span className="text-black font-bold text-lg">C</span>
                       </div>
                       <div>
                         <h3 className="font-semibold">Clover</h3>
@@ -137,7 +137,7 @@ export default function POSIntegration() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <Badge variant="secondary">Available</Badge>
+                      <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>Available</Badge>
                       <Button size="sm" variant="outline">Connect</Button>
                     </div>
                   </div>
@@ -170,7 +170,7 @@ export default function POSIntegration() {
                   <div className="space-y-2">
                     <Label>Sync Status</Label>
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2c4170' }}></div>
                       <span className="text-sm">Active</span>
                     </div>
                   </div>
@@ -184,7 +184,7 @@ export default function POSIntegration() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Zap className="h-5 w-5 text-blue-600" />
+                  <Zap className="h-5 w-5 text-black" />
                   <span>Smart Pricing Configuration</span>
                 </CardTitle>
                 <CardDescription>
@@ -251,7 +251,7 @@ export default function POSIntegration() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Package className="h-5 w-5 text-green-600" />
+                  <Package className="h-5 w-5 text-black" />
                   <span>Inventory Sync Configuration</span>
                 </CardTitle>
                 <CardDescription>

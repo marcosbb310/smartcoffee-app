@@ -126,11 +126,11 @@ const chartData = [
 const chartConfig = {
   regular: {
     label: "Regular Pricing",
-    color: "#ef4444", // Red color
+    color: "#2c4170", // Napoleon Blue
   },
   smart: {
     label: "Smart Pricing", 
-    color: "#22c55e", // Green color
+    color: "#e6eaf7", // Light Napoleon Blue (matches webpage secondary color)
   },
 } satisfies ChartConfig
 
@@ -190,24 +190,24 @@ export function ChartAreaInteractive() {
               <linearGradient id="fillRegular" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="#ef4444"
+                  stopColor="#2c4170"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="#ef4444"
+                  stopColor="#2c4170"
                   stopOpacity={0.1}
                 />
               </linearGradient>
               <linearGradient id="fillSmart" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="#22c55e"
+                  stopColor="#e6eaf7"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="#22c55e"
+                  stopColor="#e6eaf7"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -245,14 +245,14 @@ export function ChartAreaInteractive() {
               dataKey="regular"
               type="natural"
               fill="url(#fillRegular)"
-              stroke="#ef4444"
+              stroke="#2c4170"
               stackId="a"
             />
             <Area
               dataKey="smart"
               type="natural"
               fill="url(#fillSmart)"
-              stroke="#22c55e"
+              stroke="#e6eaf7"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />

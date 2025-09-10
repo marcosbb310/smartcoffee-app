@@ -81,7 +81,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <TrendingUp className="w-5 h-5 text-orange-600" />
+                    <TrendingUp className="w-5 h-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Waste Prevention</p>
                       <p className="text-sm text-muted-foreground">
@@ -93,7 +93,7 @@ export default function Home() {
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Revenue Impact</span>
-                    <Badge className="bg-green-100 text-green-800">+23%</Badge>
+                    <Badge className="bg-blue-100 text-blue-800">+23%</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -102,8 +102,8 @@ export default function Home() {
             {/* Inventory Management */}
             <Card className="text-left">
               <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <Package className="w-6 h-6 text-green-600" />
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <Package className="w-6 h-6 text-blue-600" />
                 </div>
                 <CardTitle className="text-2xl">Inventory Management</CardTitle>
                 <CardDescription className="text-base">
@@ -113,7 +113,7 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
-                    <BarChart3 className="w-5 h-5 text-green-600" />
+                    <BarChart3 className="w-5 h-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Auto Tracking</p>
                       <p className="text-sm text-muted-foreground">
@@ -122,7 +122,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <ShoppingCart className="w-5 h-5 text-orange-600" />
+                    <ShoppingCart className="w-5 h-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Smart Reordering</p>
                       <p className="text-sm text-muted-foreground">
@@ -134,7 +134,7 @@ export default function Home() {
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Waste Reduction</span>
-                    <Badge className="bg-orange-100 text-orange-800">-15%</Badge>
+                    <Badge className="bg-blue-100 text-blue-800">-15%</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -155,8 +155,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl font-bold text-green-600">2</span>
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                  <span className="text-2xl font-bold text-blue-600">2</span>
                 </div>
                 <h3 className="text-xl font-semibold">Track Sales</h3>
                 <p className="text-muted-foreground">
@@ -164,8 +164,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl font-bold text-orange-600">3</span>
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                  <span className="text-2xl font-bold text-blue-600">3</span>
                 </div>
                 <h3 className="text-xl font-semibold">Smart Actions</h3>
                 <p className="text-muted-foreground">
@@ -181,29 +181,29 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
                   <span className="font-medium">Never run out of ingredients</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
                   <span className="font-medium">Maximize revenue during peak hours</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
                   <span className="font-medium">Reduce food waste with smart pricing</span>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
                   <span className="font-medium">Automated inventory tracking</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
                   <span className="font-medium">Simple, easy-to-use interface</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
                   <span className="font-medium">Real-time insights and alerts</span>
                 </div>
               </div>

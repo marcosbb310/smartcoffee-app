@@ -29,18 +29,18 @@ export default function InventoryManagement() {
 
   const getStockStatus = (ingredient: any) => {
     const percentage = (ingredient.currentStock / ingredient.maxStock) * 100;
-    if (percentage <= 10) return { status: "critical", color: "bg-red-100 text-red-800" };
-    if (percentage <= 20) return { status: "low", color: "bg-yellow-100 text-yellow-800" };
-    if (percentage <= 50) return { status: "medium", color: "bg-blue-100 text-blue-800" };
-    return { status: "good", color: "bg-green-100 text-green-800" };
+    if (percentage <= 10) return { status: "critical", color: "text-black" };
+    if (percentage <= 20) return { status: "low", color: "text-black" };
+    if (percentage <= 50) return { status: "medium", color: "text-black" };
+    return { status: "good", color: "text-black" };
   };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case "critical": return "bg-red-100 text-red-800";
-      case "high": return "bg-orange-100 text-orange-800";
-      case "medium": return "bg-yellow-100 text-yellow-800";
-      default: return "bg-blue-100 text-blue-800";
+      case "critical": return "text-black";
+      case "high": return "text-black";
+      case "medium": return "text-black";
+      default: return "text-black";
     }
   };
 
@@ -91,10 +91,10 @@ export default function InventoryManagement() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Low Stock</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <AlertTriangle className="h-4 w-4 text-black" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">{inventoryStatus.lowStockItems}</div>
+              <div className="text-2xl font-bold text-black">{inventoryStatus.lowStockItems}</div>
               <p className="text-xs text-muted-foreground">
                 Items need attention
               </p>
@@ -104,10 +104,10 @@ export default function InventoryManagement() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Reorder Needed</CardTitle>
-              <ShoppingCart className="h-4 w-4 text-orange-600" />
+              <ShoppingCart className="h-4 w-4 text-black" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">{inventoryStatus.reorderNeeded}</div>
+              <div className="text-2xl font-bold text-black">{inventoryStatus.reorderNeeded}</div>
               <p className="text-xs text-muted-foreground">
                 Auto-reorder suggestions
               </p>
@@ -153,19 +153,19 @@ export default function InventoryManagement() {
                         <p className="text-sm text-muted-foreground">
                           {ingredient.currentStock} {ingredient.unit} remaining
                         </p>
-                        <div className="w-32 bg-muted rounded-full h-2 mt-1">
+                        <div className="w-32 rounded-full h-2 mt-1" style={{ backgroundColor: '#e6eaf7' }}>
                           <div 
-                            className={`h-2 rounded-full ${
-                              stockPercentage <= 20 ? 'bg-red-500' : 
-                              stockPercentage <= 50 ? 'bg-yellow-500' : 'bg-green-500'
-                            }`}
-                            style={{ width: `${Math.min(stockPercentage, 100)}%` }}
+                            className="h-2 rounded-full"
+                            style={{ 
+                              width: `${Math.min(stockPercentage, 100)}%`,
+                              backgroundColor: '#2c4170'
+                            }}
                           />
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Badge className={stockStatus.color}>
+                      <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
                         {stockStatus.status}
                       </Badge>
                       <div className="text-right">
@@ -189,7 +189,7 @@ export default function InventoryManagement() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <ShoppingCart className="h-5 w-5 text-orange-600" />
+              <ShoppingCart className="h-5 w-5 text-black" />
               <span>Reorder Suggestions</span>
             </CardTitle>
             <CardDescription>
@@ -200,7 +200,7 @@ export default function InventoryManagement() {
             <div className="space-y-4">
               {reorderSuggestions.length === 0 ? (
                 <div className="text-center py-8">
-                  <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
+                  <CheckCircle className="w-12 h-12 text-black mx-auto mb-4" />
                   <h3 className="text-lg font-medium">All Good!</h3>
                   <p className="text-muted-foreground">No reorders needed at this time.</p>
                 </div>
@@ -222,7 +222,7 @@ export default function InventoryManagement() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Badge className={getUrgencyColor(suggestion.urgency)}>
+                      <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
                         {suggestion.urgency}
                       </Badge>
                       <Button 
