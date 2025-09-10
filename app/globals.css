@@ -235,7 +235,8 @@
   }
   */
 
-  /* Apply darker amber to primary elements */
+  /* AMBER THEME OVERRIDES (COMMENTED OUT - CONFLICTING WITH NAPOLEON BLUE) */
+  /*
   .bg-primary,
   [data-slot="primary"],
   .bg-primary-foreground,
@@ -247,23 +248,20 @@
   .badge.bg-primary,
   [data-slot="button"],
   [data-slot="badge"] {
-    background-color: #f59e0b !important; /* amber-500 */
+    background-color: #f59e0b !important;
     color: #ffffff !important;
   }
   
-  /* Force all buttons to use amber */
   button:not([class*="bg-"]):not([class*="text-"]) {
     background-color: #f59e0b !important;
     color: #ffffff !important;
   }
   
-  /* Force all badges to use amber */
   .badge:not([class*="bg-"]):not([class*="text-"]) {
     background-color: #fef3c7 !important;
     color: #000000 !important;
   }
   
-  /* Override any remaining blue colors */
   .bg-blue-500,
   .bg-blue-600,
   .bg-blue-700,
@@ -289,12 +287,10 @@
     border-color: #fef3c7 !important;
   }
   
-  /* Nuclear option - override everything that might be blue */
   * {
     --tw-bg-opacity: 1 !important;
   }
   
-  /* Force override for any remaining blue */
   [style*="background-color: rgb(59, 130, 246)"],
   [style*="background-color: rgb(37, 99, 235)"],
   [style*="background-color: rgb(29, 78, 216)"],
@@ -313,7 +309,6 @@
     color: #000000 !important;
   }
   
-  /* Force override for dashboard badges specifically */
   .dashboard-badge,
   .dashboard .badge,
   .dashboard [class*="badge"] {
@@ -321,13 +316,13 @@
     color: #ffffff !important;
   }
   
-  /* Override any blue that might be coming from CSS variables */
   :root {
     --primary: #f59e0b !important;
     --primary-foreground: #ffffff !important;
     --secondary: #fef3c7 !important;
     --secondary-foreground: #000000 !important;
   }
+  */
   
   /* SLEEK BADGE STYLING (EASY TO UNDO - COMMENT OUT THIS SECTION) */
   .badge {
