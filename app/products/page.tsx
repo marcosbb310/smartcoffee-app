@@ -1,438 +1,365 @@
-"use client"
-
-import { useState } from "react";
 import { MainLayout } from "@/app/components/main-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
-import { Switch } from "@/app/components/ui/switch";
-import { Slider } from "@/app/components/ui/slider";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/app/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/app/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { 
+  Search, 
   Plus, 
+  Filter, 
+  MoreHorizontal, 
   Edit, 
-  Trash2, 
-  Settings, 
-  Coffee, 
-  Clock, 
+  Coffee,
+  DollarSign,
   TrendingUp,
+  TrendingDown,
+  Clock,
   AlertCircle,
-  CheckCircle,
-  MoreHorizontal
+  Package,
+  BarChart3,
+  Settings,
+  Download,
+  Upload,
+  Eye,
+  Trash2,
+  Copy,
+  Star
 } from "lucide-react";
 
-// Sample product data
-const products = [
-  {
-    id: 1,
-    name: "Americano",
-    category: "Coffee",
-    basePrice: 4.00,
-    currentPrice: 4.50,
-    demand: 70,
-    inventory: 85,
-    pricingRule: "Peak Hours",
-    status: "active"
-  },
-  {
-    id: 2,
-    name: "Latte",
-    category: "Coffee",
-    basePrice: 5.50,
-    currentPrice: 6.80,
-    demand: 92,
-    inventory: 60,
-    pricingRule: "High Demand",
-    status: "active"
-  },
-  {
-    id: 3,
-    name: "Cappuccino",
-    category: "Coffee",
-    basePrice: 5.00,
-    currentPrice: 5.75,
-    demand: 78,
-    inventory: 90,
-    pricingRule: "Peak Hours",
-    status: "active"
-  },
-  {
-    id: 4,
-    name: "Espresso",
-    category: "Coffee",
-    basePrice: 3.50,
-    currentPrice: 4.00,
-    demand: 65,
-    inventory: 95,
-    pricingRule: "Low Inventory",
-    status: "active"
-  },
-  {
-    id: 5,
-    name: "Muffin",
-    category: "Pastry",
-    basePrice: 3.00,
-    currentPrice: 3.00,
-    demand: 45,
-    inventory: 100,
-    pricingRule: "None",
-    status: "inactive"
-  }
-];
-
 export default function Products() {
-  const [selectedProduct, setSelectedProduct] = useState(products[0]);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [pricingRules, setPricingRules] = useState({
-    peakHours: true,
-    demandThreshold: 80,
-    inventoryThreshold: 20,
-    maxIncrease: 25
-  });
+  const products = [
+    {
+      id: 1,
+      name: "Espresso",
+      category: "Coffee",
+      currentPrice: 3.50,
+      previousPrice: 3.25,
+      change: "+7.7%",
+      trend: "up",
+      inventory: 45,
+      status: "active",
+      lastUpdated: "2 min ago",
+      revenue: 1247,
+      orders: 89,
+      rating: 4.8
+    },
+    {
+      id: 2,
+      name: "Cappuccino",
+      category: "Coffee",
+      currentPrice: 4.25,
+      previousPrice: 4.50,
+      change: "-5.6%",
+      trend: "down",
+      inventory: 12,
+      status: "low",
+      lastUpdated: "15 min ago",
+      revenue: 892,
+      orders: 67,
+      rating: 4.6
+    },
+    {
+      id: 3,
+      name: "Latte",
+      category: "Coffee",
+      currentPrice: 4.75,
+      previousPrice: 4.75,
+      change: "0%",
+      trend: "stable",
+      inventory: 28,
+      status: "active",
+      lastUpdated: "1 hour ago",
+      revenue: 1567,
+      orders: 112,
+      rating: 4.9
+    },
+    {
+      id: 4,
+      name: "Croissant",
+      category: "Pastry",
+      currentPrice: 2.95,
+      previousPrice: 2.75,
+      change: "+7.3%",
+      trend: "up",
+      inventory: 8,
+      status: "low",
+      lastUpdated: "30 min ago",
+      revenue: 445,
+      orders: 34,
+      rating: 4.4
+    },
+    {
+      id: 5,
+      name: "Muffin",
+      category: "Pastry",
+      currentPrice: 3.25,
+      previousPrice: 3.25,
+      change: "0%",
+      trend: "stable",
+      inventory: 15,
+      status: "active",
+      lastUpdated: "2 hours ago",
+      revenue: 678,
+      orders: 52,
+      rating: 4.5
+    },
+    {
+      id: 6,
+      name: "Americano",
+      category: "Coffee",
+      currentPrice: 3.25,
+      previousPrice: 3.00,
+      change: "+8.3%",
+      trend: "up",
+      inventory: 32,
+      status: "active",
+      lastUpdated: "45 min ago",
+      revenue: 934,
+      orders: 71,
+      rating: 4.7
+    }
+  ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "active": return "bg-green-100 text-green-800";
+      case "low": return "bg-yellow-100 text-yellow-800";
+      case "out": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getTrendIcon = (trend: string) => {
+    switch (trend) {
+      case "up": return <TrendingUp className="w-4 h-4 text-green-600" />;
+      case "down": return <TrendingDown className="w-4 h-4 text-red-600" />;
+      default: return <Clock className="w-4 h-4 text-gray-600" />;
+    }
+  };
 
   return (
     <MainLayout>
-      <div className="w-full">
-        {/* Page Header */}
-        <div className="flex items-center justify-between mb-8">
+      <div className="w-full space-y-8">
+        {/* Header - Modern */}
+        <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-foreground mb-2">Products & Pricing</h2>
-            <p className="text-muted-foreground">Manage your menu items and pricing rules</p>
+            <h1 className="text-4xl font-bold">Products</h1>
+            <p className="text-muted-foreground">Manage your menu items and pricing strategy</p>
           </div>
-          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Product
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Add New Product</DialogTitle>
-                <DialogDescription>
-                  Add a new product to your menu and configure its pricing rules.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name">Product Name</Label>
-                    <Input id="name" placeholder="e.g., Americano" />
-                  </div>
-                  <div>
-                    <Label htmlFor="category">Category</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="coffee">Coffee</SelectItem>
-                        <SelectItem value="pastry">Pastry</SelectItem>
-                        <SelectItem value="food">Food</SelectItem>
-                        <SelectItem value="beverage">Beverage</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="basePrice">Base Price ($)</Label>
-                    <Input id="basePrice" type="number" step="0.01" placeholder="4.00" />
-                  </div>
-                  <div>
-                    <Label htmlFor="inventory">Initial Inventory</Label>
-                    <Input id="inventory" type="number" placeholder="100" />
-                  </div>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setIsEditDialogOpen(false)}>
-                  Add Product
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="sm">
+              <Download className="w-4 h-4 mr-1" />
+              Export
+            </Button>
+            <Button variant="outline" size="sm">
+              <Upload className="w-4 h-4 mr-1" />
+              Import
+            </Button>
+            <Button variant="outline" size="sm">
+              <Filter className="w-4 h-4 mr-1" />
+              Filter
+            </Button>
+            <Button size="sm">
+              <Plus className="w-4 h-4 mr-1" />
+              Add Product
+            </Button>
+          </div>
         </div>
 
-        <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="products">Products</TabsTrigger>
-            <TabsTrigger value="rules">Pricing Rules</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="products" className="space-y-6">
-            {/* Products Table */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Menu Items</CardTitle>
-                <CardDescription>Manage your products and their current pricing status</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Base Price</TableHead>
-                      <TableHead>Current Price</TableHead>
-                      <TableHead>Demand</TableHead>
-                      <TableHead>Inventory</TableHead>
-                      <TableHead>Pricing Rule</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {products.map((product) => (
-                      <TableRow key={product.id}>
-                        <TableCell className="font-medium">{product.name}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{product.category}</Badge>
-                        </TableCell>
-                        <TableCell>${product.basePrice}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-medium">${product.currentPrice}</span>
-                            {product.currentPrice > product.basePrice && (
-                              <Badge variant="default" className="text-xs">
-                                +{((product.currentPrice - product.basePrice) / product.basePrice * 100).toFixed(0)}%
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <span>{product.demand}%</span>
-                            <div className="w-16 bg-muted rounded-full h-2">
-                              <div 
-                                className="bg-primary h-2 rounded-full" 
-                                style={{ width: `${product.demand}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <span>{product.inventory}%</span>
-                            <div className="w-16 bg-muted rounded-full h-2">
-                              <div 
-                                className={`h-2 rounded-full ${
-                                  product.inventory < 30 ? 'bg-destructive' : 
-                                  product.inventory < 60 ? 'bg-yellow-500' : 'bg-green-500'
-                                }`}
-                                style={{ width: `${product.inventory}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={product.pricingRule === "None" ? "outline" : "secondary"}>
-                            {product.pricingRule}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={product.status === "active" ? "default" : "outline"}>
-                            {product.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <Button variant="ghost" size="sm">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="rules" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Peak Hours Rule */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Clock className="h-5 w-5" />
-                    <span>Peak Hours Pricing</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Automatically increase prices during busy periods
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="peak-hours">Enable Peak Hours</Label>
-                    <Switch 
-                      id="peak-hours" 
-                      checked={pricingRules.peakHours}
-                      onCheckedChange={(checked) => 
-                        setPricingRules({...pricingRules, peakHours: checked})
-                      }
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Peak Hours Schedule</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label htmlFor="start-time">Start Time</Label>
-                        <Input id="start-time" type="time" defaultValue="07:00" />
-                      </div>
-                      <div>
-                        <Label htmlFor="end-time">End Time</Label>
-                        <Input id="end-time" type="time" defaultValue="09:00" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Price Increase: {pricingRules.maxIncrease}%</Label>
-                    <Slider
-                      value={[pricingRules.maxIncrease]}
-                      onValueChange={(value) => 
-                        setPricingRules({...pricingRules, maxIncrease: value[0]})
-                      }
-                      max={50}
-                      step={5}
-                      className="w-full"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Demand-Based Rule */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <TrendingUp className="h-5 w-5" />
-                    <span>Demand-Based Pricing</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Adjust prices based on real-time demand patterns
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Demand Threshold: {pricingRules.demandThreshold}%</Label>
-                    <Slider
-                      value={[pricingRules.demandThreshold]}
-                      onValueChange={(value) => 
-                        setPricingRules({...pricingRules, demandThreshold: value[0]})
-                      }
-                      max={100}
-                      step={5}
-                      className="w-full"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      When demand exceeds this threshold, prices will increase
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Inventory Threshold: {pricingRules.inventoryThreshold}%</Label>
-                    <Slider
-                      value={[pricingRules.inventoryThreshold]}
-                      onValueChange={(value) => 
-                        setPricingRules({...pricingRules, inventoryThreshold: value[0]})
-                      }
-                      max={50}
-                      step={5}
-                      className="w-full"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      When inventory drops below this level, prices will increase
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Rule Status */}
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle>Active Rules Summary</CardTitle>
-                  <CardDescription>Current pricing rules and their status</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <div>
-                        <p className="font-medium">Peak Hours</p>
-                        <p className="text-sm text-muted-foreground">7:00 AM - 9:00 AM</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <div>
-                        <p className="font-medium">High Demand</p>
-                        <p className="text-sm text-muted-foreground">Above 80% demand</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                      <AlertCircle className="h-5 w-5 text-yellow-500" />
-                      <div>
-                        <p className="font-medium">Low Inventory</p>
-                        <p className="text-sm text-muted-foreground">Below 20% stock</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+        {/* Search and Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="md:col-span-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input 
+                placeholder="Search products, categories, or prices..." 
+                className="pl-10"
+              />
             </div>
-          </TabsContent>
-
-          <TabsContent value="categories" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Product Categories</CardTitle>
-                <CardDescription>Manage your product categories and their pricing settings</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {["Coffee", "Pastry", "Food", "Beverage"].map((category) => (
-                    <Card key={category} className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-medium">{category}</h3>
-                        <Badge variant="outline">12 items</Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Average price increase: +18.5%
-                      </p>
-                      <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-3 w-3 mr-1" />
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Settings className="h-3 w-3 mr-1" />
-                          Rules
-                        </Button>
-                      </div>
-                    </Card>
-                  ))}
+          </div>
+          
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Items</p>
+                  <p className="text-2xl font-bold">47</p>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+                <Package className="w-8 h-8 text-primary" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Avg. Price</p>
+                  <p className="text-2xl font-bold">$3.74</p>
+                </div>
+                <DollarSign className="w-8 h-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Products Grid - Default View */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Menu Items</h2>
+              <p className="text-muted-foreground">Current pricing and performance data</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm">
+                <Eye className="w-4 h-4 mr-1" />
+                View Details
+              </Button>
+              <Button variant="outline" size="sm">
+                <MoreHorizontal className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <Card key={product.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Coffee className="w-5 h-5 text-primary" />
+                      <CardTitle className="text-lg font-bold">{product.name}</CardTitle>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                      <span className="text-sm font-medium">{product.rating}</span>
+                    </div>
+                  </div>
+                  <CardDescription>
+                    <Badge variant="outline">{product.category}</Badge>
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="space-y-3">
+                  {/* Price Section */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Price</span>
+                    <div className="text-right">
+                      <div className="text-xl font-bold">${product.currentPrice}</div>
+                      <div className="flex items-center space-x-1">
+                        {getTrendIcon(product.trend)}
+                        <span className={`text-xs font-medium ${
+                          product.trend === 'up' ? 'text-green-600' : 
+                          product.trend === 'down' ? 'text-red-600' : 
+                          'text-gray-600'
+                        }`}>
+                          {product.change}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Revenue & Inventory */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Revenue</span>
+                    <span className="text-sm font-medium">${product.revenue}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Inventory</span>
+                    <div className="flex items-center space-x-1">
+                      <span className="text-sm font-medium">{product.inventory}</span>
+                      {product.inventory < 15 && (
+                        <AlertCircle className="w-3 h-3 text-yellow-600" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Status */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Status</span>
+                    <Badge className={`text-xs ${getStatusColor(product.status)}`}>
+                      {product.status === 'active' ? 'In Stock' : 
+                       product.status === 'low' ? 'Low Stock' : 
+                       'Out of Stock'}
+                    </Badge>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2 border-t flex gap-2">
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Edit className="w-3 h-3 mr-1" />
+                      Edit
+                    </Button>
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Eye className="w-3 h-3 mr-1" />
+                      View
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <MoreHorizontal className="w-3 h-3" />
+                    </Button>
+                  </div>
+
+                  {/* Last Updated */}
+                  <div className="pt-2">
+                    <p className="text-xs text-muted-foreground text-center">
+                      Updated {product.lastUpdated}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+
+        {/* Quick Actions - Modern */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-6 text-center space-y-4">
+              <Edit className="w-8 h-8 text-primary mx-auto" />
+              <h3 className="font-bold text-lg">Bulk Update</h3>
+              <p className="text-sm text-muted-foreground">Update multiple items at once</p>
+              <Button variant="outline" className="w-full">
+                Select Items
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-6 text-center space-y-4">
+              <Clock className="w-8 h-8 text-primary mx-auto" />
+              <h3 className="font-bold text-lg">Peak Hours</h3>
+              <p className="text-sm text-muted-foreground">Configure rush hour pricing</p>
+              <Button variant="outline" className="w-full">
+                Set Schedule
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-6 text-center space-y-4">
+              <AlertCircle className="w-8 h-8 text-primary mx-auto" />
+              <h3 className="font-bold text-lg">Inventory Alerts</h3>
+              <p className="text-sm text-muted-foreground">Manage low stock notifications</p>
+              <Button variant="outline" className="w-full">
+                Configure
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-6 text-center space-y-4">
+              <BarChart3 className="w-8 h-8 text-primary mx-auto" />
+              <h3 className="font-bold text-lg">Analytics</h3>
+              <p className="text-sm text-muted-foreground">View detailed performance data</p>
+              <Button variant="outline" className="w-full">
+                View Analytics
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </MainLayout>
   );
