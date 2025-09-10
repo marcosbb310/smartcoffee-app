@@ -22,7 +22,8 @@ import {
   Package, 
   BarChart3, 
   Link2, 
-  Settings
+  Settings,
+  Warehouse
 } from "lucide-react";
 
 const navigation = [
@@ -37,9 +38,9 @@ const navigation = [
     icon: Package,
   },
   {
-    title: "Analytics",
-    url: "/analytics",
-    icon: BarChart3,
+    title: "Inventory",
+    url: "/inventory",
+    icon: Warehouse,
   },
   {
     title: "POS Integration",

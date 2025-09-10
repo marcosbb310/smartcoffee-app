@@ -242,17 +242,17 @@ export function ChartAreaInteractive() {
               }
             />
             <Area
-              dataKey="smart"
-              type="natural"
-              fill="url(#fillSmart)"
-              stroke="#22c55e"
-              stackId="a"
-            />
-            <Area
               dataKey="regular"
               type="natural"
               fill="url(#fillRegular)"
               stroke="#ef4444"
+              stackId="a"
+            />
+            <Area
+              dataKey="smart"
+              type="natural"
+              fill="url(#fillSmart)"
+              stroke="#22c55e"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />
