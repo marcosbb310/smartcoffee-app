@@ -1,153 +1,197 @@
-// Inventory Management Types
 export interface Ingredient {
   id: string;
   name: string;
-  unit: string; // "ml", "g", "cups", "pieces"
+  unit: 'kg' | 'g' | 'L' | 'ml' | 'pieces' | 'cups' | 'tbsp' | 'tsp';
   currentStock: number;
-  minStock: number; // Reorder threshold
-  maxStock: number; // Maximum storage capacity
+  minStockLevel: number;
+  maxStockLevel: number;
   costPerUnit: number;
   supplier: string;
-  shelfLife: number; // days
-  category: "dairy" | "coffee" | "sweetener" | "pastry" | "other";
-  lastRestocked: Date;
-  expirationDate?: Date;
+  expiryDate?: Date;
+  category: 'coffee' | 'milk' | 'syrup' | 'topping' | 'pastry' | 'other';
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  basePrice: number;
+  category: 'beverage' | 'food' | 'pastry';
   isActive: boolean;
+  recipe: RecipeItem[];
 }
 
-export interface Recipe {
-  id: string;
-  productId: string;
+export interface RecipeItem {
   ingredientId: string;
-  quantity: number; // How much of this ingredient (in ingredient's unit)
-  isOptional: boolean; // For variations like "extra shot"
-  notes?: string;
+  ingredientName: string;
+  quantity: number;
+  unit: string;
 }
 
-export interface InventoryTransaction {
+export interface Vendor {
   id: string;
-  ingredientId: string;
-  type: "sale" | "restock" | "waste" | "adjustment" | "expired";
-  quantity: number; // positive for restock, negative for sale/waste
-  timestamp: Date;
-  productId?: string; // For sales
-  reason?: string; // For waste/adjustments
-  cost?: number; // For restock transactions
-}
-
-export interface ReorderRule {
-  id: string;
-  ingredientId: string;
-  triggerType: "stock_level" | "time_based" | "demand_forecast";
-  threshold: number; // Stock level or days ahead
-  reorderQuantity: number;
-  supplier: string;
-  leadTime: number; // days
+  name: string;
+  contactInfo: string;
+  deliveryTime: number; // in days
+  minimumOrder: number;
   isActive: boolean;
-  lastTriggered?: Date;
 }
 
 export interface InventoryAlert {
   id: string;
-  type: "low_stock" | "reorder_needed" | "expiring_soon" | "overstocked";
+  type: 'low_stock' | 'expiring_soon' | 'out_of_stock' | 'overstock';
   ingredientId: string;
+  ingredientName: string;
   message: string;
-  severity: "low" | "medium" | "high" | "critical";
-  timestamp: Date;
-  isResolved: boolean;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  createdAt: Date;
+  isRead: boolean;
 }
 
-export interface WastePreventionRule {
+export interface AutoOrder {
   id: string;
-  productId: string;
+  vendorId: string;
+  vendorName: string;
+  items: AutoOrderItem[];
+  totalCost: number;
+  status: 'pending' | 'confirmed' | 'delivered' | 'cancelled';
+  createdAt: Date;
+  expectedDelivery: Date;
+}
+
+export interface AutoOrderItem {
   ingredientId: string;
-  lowStockThreshold: number; // percentage of normal stock
-  priceReductionPercent: number; // how much to reduce price
+  ingredientName: string;
+  quantity: number;
+  unit: string;
+  costPerUnit: number;
+  totalCost: number;
+}
+
+export interface ExpiryPricing {
+  ingredientId: string;
+  ingredientName: string;
+  daysUntilExpiry: number;
+  priceReductionPercentage: number;
   isActive: boolean;
 }
 
-// Sample data for development
+export interface SmartInventorySettings {
+  enabled: boolean;
+  autoOrdering: boolean;
+  expiryPricing: boolean;
+  alertSettings: {
+    lowStockThreshold: number; // percentage
+    expiryWarningDays: number;
+    enableNotifications: boolean;
+  };
+  pricingSettings: {
+    expiryReductionSteps: ExpiryPricing[];
+  };
+}
+
+// Sample data for demonstration
 export const sampleIngredients: Ingredient[] = [
   {
-    id: "milk-whole",
-    name: "Whole Milk",
-    unit: "ml",
-    currentStock: 5000,
-    minStock: 1000,
-    maxStock: 10000,
-    costPerUnit: 0.001, // $0.001 per ml
-    supplier: "Local Dairy Co.",
-    shelfLife: 7,
-    category: "dairy",
-    lastRestocked: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-    expirationDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
-    isActive: true,
-  },
-  {
-    id: "espresso-beans",
+    id: "1",
     name: "Espresso Beans",
-    unit: "g",
-    currentStock: 2000,
-    minStock: 500,
-    maxStock: 5000,
-    costPerUnit: 0.05, // $0.05 per gram
-    supplier: "Coffee Roasters Inc.",
-    shelfLife: 30,
-    category: "coffee",
-    lastRestocked: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-    expirationDate: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000), // 25 days from now
-    isActive: true,
+    unit: "kg",
+    currentStock: 2.5,
+    minStockLevel: 5.0,
+    maxStockLevel: 20.0,
+    costPerUnit: 15.99,
+    supplier: "Coffee Supply Co",
+    expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    category: "coffee"
   },
   {
-    id: "sugar-white",
-    name: "White Sugar",
-    unit: "g",
-    currentStock: 1000,
-    minStock: 200,
-    maxStock: 2000,
-    costPerUnit: 0.002, // $0.002 per gram
-    supplier: "Bulk Foods Ltd.",
-    shelfLife: 365,
-    category: "sweetener",
-    lastRestocked: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
-    isActive: true,
+    id: "2",
+    name: "Whole Milk",
+    unit: "L",
+    currentStock: 8.0,
+    minStockLevel: 10.0,
+    maxStockLevel: 50.0,
+    costPerUnit: 1.25,
+    supplier: "Dairy Direct",
+    expiryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    category: "milk"
   },
+  {
+    id: "3",
+    name: "Vanilla Syrup",
+    unit: "L",
+    currentStock: 0.8,
+    minStockLevel: 2.0,
+    maxStockLevel: 10.0,
+    costPerUnit: 8.50,
+    supplier: "Flavor World",
+    expiryDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+    category: "syrup"
+  },
+  {
+    id: "4",
+    name: "Oat Milk",
+    unit: "L",
+    currentStock: 12.0,
+    minStockLevel: 5.0,
+    maxStockLevel: 25.0,
+    costPerUnit: 2.50,
+    supplier: "Plant Based Co",
+    expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    category: "milk"
+  },
+  {
+    id: "5",
+    name: "Chocolate Syrup",
+    unit: "L",
+    currentStock: 1.2,
+    minStockLevel: 2.0,
+    maxStockLevel: 8.0,
+    costPerUnit: 7.99,
+    supplier: "Flavor World",
+    expiryDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
+    category: "syrup"
+  },
+  {
+    id: "6",
+    name: "Croissants",
+    unit: "pieces",
+    currentStock: 15,
+    minStockLevel: 20,
+    maxStockLevel: 50,
+    costPerUnit: 1.50,
+    supplier: "Bakery Fresh",
+    expiryDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+    category: "pastry"
+  }
 ];
 
-export const sampleRecipes: Recipe[] = [
-  {
-    id: "espresso-recipe",
-    productId: "1", // Espresso
-    ingredientId: "espresso-beans",
-    quantity: 18, // 18g of beans per espresso
-    isOptional: false,
-  },
-  {
-    id: "cappuccino-milk",
-    productId: "2", // Cappuccino
-    ingredientId: "milk-whole",
-    quantity: 150, // 150ml of milk
-    isOptional: false,
-  },
-  {
-    id: "cappuccino-espresso",
-    productId: "2", // Cappuccino
-    ingredientId: "espresso-beans",
-    quantity: 18, // 18g of beans
-    isOptional: false,
-  },
-  {
-    id: "latte-milk",
-    productId: "3", // Latte
-    ingredientId: "milk-whole",
-    quantity: 250, // 250ml of milk
-    isOptional: false,
-  },
-  {
-    id: "latte-espresso",
-    productId: "3", // Latte
-    ingredientId: "espresso-beans",
-    quantity: 18, // 18g of beans
-    isOptional: false,
-  },
-];
+export const sampleRecipes: { [productId: string]: RecipeItem[] } = {
+  "1": [ // Espresso
+    { ingredientId: "1", ingredientName: "Espresso Beans", quantity: 0.02, unit: "kg" }
+  ],
+  "2": [ // Cappuccino
+    { ingredientId: "1", ingredientName: "Espresso Beans", quantity: 0.02, unit: "kg" },
+    { ingredientId: "2", ingredientName: "Whole Milk", quantity: 0.15, unit: "L" }
+  ],
+  "3": [ // Latte
+    { ingredientId: "1", ingredientName: "Espresso Beans", quantity: 0.02, unit: "kg" },
+    { ingredientId: "2", ingredientName: "Whole Milk", quantity: 0.25, unit: "L" }
+  ],
+  "4": [ // Vanilla Latte
+    { ingredientId: "1", ingredientName: "Espresso Beans", quantity: 0.02, unit: "kg" },
+    { ingredientId: "2", ingredientName: "Whole Milk", quantity: 0.25, unit: "L" },
+    { ingredientId: "3", ingredientName: "Vanilla Syrup", quantity: 0.02, unit: "L" }
+  ],
+  "5": [ // Oat Milk Latte
+    { ingredientId: "1", ingredientName: "Espresso Beans", quantity: 0.02, unit: "kg" },
+    { ingredientId: "4", ingredientName: "Oat Milk", quantity: 0.25, unit: "L" }
+  ],
+  "6": [ // Mocha
+    { ingredientId: "1", ingredientName: "Espresso Beans", quantity: 0.02, unit: "kg" },
+    { ingredientId: "2", ingredientName: "Whole Milk", quantity: 0.20, unit: "L" },
+    { ingredientId: "5", ingredientName: "Chocolate Syrup", quantity: 0.03, unit: "L" }
+  ],
+  "7": [ // Croissant
+    { ingredientId: "6", ingredientName: "Croissants", quantity: 1, unit: "pieces" }
+  ]
+};

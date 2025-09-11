@@ -22,7 +22,6 @@ import {
   Package, 
   BarChart3, 
   Link2, 
-  Settings,
   Warehouse
 } from "lucide-react";
 
@@ -84,18 +83,6 @@ export function SidebarNav() {
         </SidebarGroup>
       </SidebarContent>
       
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/settings">
-                <Settings className="h-4 w-4" />
-                <span>Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

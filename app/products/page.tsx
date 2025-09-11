@@ -15,7 +15,6 @@ import {
   Settings,
   Zap,
   TrendingUp,
-  TrendingDown,
   X
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/app/components/ui/dialog";
@@ -24,17 +23,40 @@ import { Switch } from "@/app/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { inventoryService } from "@/lib/services/inventory";
+import { PeakHour, DayPeakHours, PeakHourSettings, DAYS_OF_WEEK } from "@/lib/types/peak-hours";
+import { ProductPeakHoursDialog } from "@/app/components/product-peak-hours-dialog";
+import { GlobalSmartPricingDialog } from "@/app/components/global-smart-pricing-dialog";
 
 export default function Products() {
-  // State for peak hour settings
-  const [peakHourSettings, setPeakHourSettings] = React.useState<{[key: string]: {
-    enabled: boolean;
-    startTime: string;
-    endTime: string;
-    daysOfWeek: string[];
-    minPrice: number;
-    maxPrice: number;
-  }}>({});
+  // State for peak hour settings - now using the new structure
+  const [peakHourSettings, setPeakHourSettings] = React.useState<{[key: string]: PeakHourSettings}>({
+    // Sample data for demonstration
+    "1": {
+      days: DAYS_OF_WEEK.map((day, index) => ({
+        day,
+        enabled: index < 5, // Monday-Friday enabled
+        peakHours: index < 5 ? [
+          {
+            id: `morning-${day.toLowerCase()}`,
+            startTime: "07:00",
+            endTime: "09:00",
+            multiplier: 1.15,
+            label: "Morning Rush"
+          },
+          {
+            id: `lunch-${day.toLowerCase()}`,
+            startTime: "12:00",
+            endTime: "14:00",
+            multiplier: 1.20,
+            label: "Lunch Rush"
+          }
+        ] : [],
+        minPrice: index < 5 ? (index === 0 ? 1.50 : 1.25) : undefined, // Monday higher min, others lower
+        maxPrice: index < 5 ? (index === 4 ? 5.00 : 4.50) : undefined // Friday higher max, others lower
+      })),
+      globalMultiplier: 1.15
+    }
+  });
 
   // State for search
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -42,12 +64,35 @@ export default function Products() {
   // State for category filter
   const [selectedCategory, setSelectedCategory] = React.useState<string>("all");
   
-  // State for smart features
-  const [smartPricingEnabled, setSmartPricingEnabled] = React.useState(true);
-  const [smartInventoryEnabled, setSmartInventoryEnabled] = React.useState(true);
   
   // State for add product dialog
   const [isAddProductOpen, setIsAddProductOpen] = React.useState(false);
+  
+  // State for peak hours dialog
+  const [peakHoursDialogOpen, setPeakHoursDialogOpen] = React.useState(false);
+  const [selectedProductId, setSelectedProductId] = React.useState<string | null>(null);
+  
+  // State for global smart pricing
+  const [globalSmartPricingDialogOpen, setGlobalSmartPricingDialogOpen] = React.useState(false);
+  const [globalSmartPricingSettings, setGlobalSmartPricingSettings] = React.useState({
+    enabled: false,
+    globalPeakHours: {
+      days: DAYS_OF_WEEK.map(day => ({
+        day,
+        enabled: false,
+        peakHours: []
+      })),
+      globalMultiplier: 1.15
+    },
+    priceParameters: {
+      minPricePercentage: 50,
+      maxPricePercentage: 150,
+      defaultMultiplier: 1.15,
+      pricingStrategy: 'multiplier' as const
+    }
+  });
+
+
   const [newProduct, setNewProduct] = React.useState({
     name: "",
     category: "Hot Drinks",
@@ -475,34 +520,25 @@ export default function Products() {
 
 
   // Handle peak hour settings update
-  const updatePeakHourSettings = (productId: string, settings: Partial<{
-    enabled: boolean;
-    startTime: string;
-    endTime: string;
-    daysOfWeek: string[];
-    minPrice: number;
-    maxPrice: number;
-  }>) => {
+  const updatePeakHourSettings = (productId: string, settings: Partial<PeakHourSettings>) => {
     setPeakHourSettings(prev => {
       const currentSettings = prev[productId];
       
       if (!currentSettings) {
-        // First time - only set what's provided, no defaults
         return {
           ...prev,
           [productId]: {
-            enabled: settings.enabled ?? false,
-            startTime: settings.startTime ?? "07:00",
-            endTime: settings.endTime ?? "09:00",
-            daysOfWeek: settings.daysOfWeek ?? [],
-            minPrice: settings.minPrice ?? 0,
-            maxPrice: settings.maxPrice ?? 100,
+            days: DAYS_OF_WEEK.map(day => ({
+              day,
+              enabled: false,
+              peakHours: []
+            })),
+            globalMultiplier: 1.15,
             ...settings
           }
         };
       }
       
-      // Update existing settings
       return {
         ...prev,
         [productId]: {
@@ -512,6 +548,39 @@ export default function Products() {
       };
     });
   };
+
+  // Helper function to get default peak hour settings for a product
+  const getDefaultPeakHourSettings = (): PeakHourSettings => ({
+    days: DAYS_OF_WEEK.map(day => ({
+      day,
+      enabled: false,
+      peakHours: []
+    })),
+    globalMultiplier: 1.15
+  });
+
+  // Handle opening peak hours dialog
+  const handleOpenPeakHoursDialog = (productId: string) => {
+    setSelectedProductId(productId);
+    setPeakHoursDialogOpen(true);
+  };
+
+  // Handle saving peak hours settings
+  const handleSavePeakHoursSettings = (settings: PeakHourSettings) => {
+    if (selectedProductId) {
+      updatePeakHourSettings(selectedProductId, settings);
+    }
+    setPeakHoursDialogOpen(false);
+    setSelectedProductId(null);
+  };
+
+  // Handle saving global smart pricing settings
+  const handleSaveGlobalSmartPricingSettings = (settings: any) => {
+    setGlobalSmartPricingSettings(settings);
+    // Here you would typically save to your backend/state management
+    console.log('Global smart pricing settings saved:', settings);
+  };
+
 
 
   const getStatusColor = (status: string) => {
@@ -540,29 +609,32 @@ export default function Products() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            {/* Smart Pricing Toggle */}
+            {/* Global Smart Pricing Toggle */}
             <div className="flex items-center gap-2">
               <Switch
-                id="smart-pricing"
-                checked={smartPricingEnabled}
-                onCheckedChange={setSmartPricingEnabled}
+                id="global-smart-pricing"
+                checked={globalSmartPricingSettings.enabled}
+                onCheckedChange={(checked) => 
+                  setGlobalSmartPricingSettings(prev => ({ ...prev, enabled: checked }))
+                }
               />
-              <Label htmlFor="smart-pricing" className="text-sm font-medium">
-                Smart Pricing
+              <Label htmlFor="global-smart-pricing" className="text-sm font-medium">
+                Global Smart Pricing
               </Label>
             </div>
             
-            {/* Smart Inventory Toggle */}
-            <div className="flex items-center gap-2">
-              <Switch
-                id="smart-inventory"
-                checked={smartInventoryEnabled}
-                onCheckedChange={setSmartInventoryEnabled}
-              />
-              <Label htmlFor="smart-inventory" className="text-sm font-medium">
-                Smart Inventory
-              </Label>
-            </div>
+            {/* Global Smart Pricing Settings Button */}
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setGlobalSmartPricingDialogOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              Configure
+            </Button>
+
+            
             
             {/* Add Product Button */}
             <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
@@ -715,58 +787,43 @@ export default function Products() {
         </div>
 
         {/* Smart Features Status */}
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* Peak Hour Status */}
+        <div className="grid gap-4 md:grid-cols-3">
+          {/* Global Smart Pricing Status */}
           <Card>
             <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <Clock className="h-5 w-5 text-black" />
-                <div>
-                  <p className="font-medium text-black">
-                    {smartPricingEnabled 
-                      ? (isPeakHour() ? "Peak Hours Active" : "Off-Peak Hours")
-                      : "Smart Pricing Disabled"
-                    }
-                  </p>
-                  <p className="text-sm text-black">
-                    {smartPricingEnabled 
-                      ? (isPeakHour() 
-                          ? "Prices are automatically increased during high-demand periods" 
-                          : "Standard pricing is currently active"
-                        )
-                      : "Smart pricing features are turned off"
-                    }
-                  </p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Settings className="h-5 w-5 text-black" />
+                  <div>
+                    <p className="font-medium text-black">
+                      {globalSmartPricingSettings.enabled ? "Global Smart Pricing Active" : "Global Smart Pricing Disabled"}
+                    </p>
+                    <p className="text-sm text-black">
+                      {globalSmartPricingSettings.enabled 
+                        ? `${globalSmartPricingSettings.priceParameters.pricingStrategy === 'multiplier' ? 'Multiplier' : 'Range'} approach: ${globalSmartPricingSettings.priceParameters.minPricePercentage}% - ${globalSmartPricingSettings.priceParameters.maxPricePercentage}%`
+                        : "Toggle above to enable global smart pricing for all products"
+                      }
+                    </p>
+                  </div>
                 </div>
-                <Badge className="text-black" style={{ backgroundColor: smartPricingEnabled ? '#e6eaf7' : '#f3f4f6' }}>
-                  {smartPricingEnabled ? (isPeakHour() ? "Peak" : "Off-Peak") : "Disabled"}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge className="text-black" style={{ backgroundColor: globalSmartPricingSettings.enabled ? '#e6eaf7' : '#f3f4f6' }}>
+                    {globalSmartPricingSettings.enabled ? "Active" : "Disabled"}
+                  </Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setGlobalSmartPricingDialogOpen(true)}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Smart Inventory Status */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <Package className="h-5 w-5 text-black" />
-                <div>
-                  <p className="font-medium text-black">
-                    {smartInventoryEnabled ? "Smart Inventory Active" : "Smart Inventory Disabled"}
-                  </p>
-                  <p className="text-sm text-black">
-                    {smartInventoryEnabled 
-                      ? "AI-powered inventory management and waste prevention" 
-                      : "Manual inventory management only"
-                    }
-                  </p>
-                </div>
-                <Badge className="text-black" style={{ backgroundColor: smartInventoryEnabled ? '#e6eaf7' : '#f3f4f6' }}>
-                  {smartInventoryEnabled ? "Active" : "Disabled"}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
+
         </div>
 
         {/* Search and Filters */}
@@ -898,176 +955,15 @@ export default function Products() {
 
                 {/* Actions */}
                 <div className="flex space-x-2">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="flex-1">
-                        <Clock className="w-4 h-4 mr-2" />
-                        Peak Hours
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[500px]">
-                      <DialogHeader>
-                        <DialogTitle>Peak Hour Settings - {product.name}</DialogTitle>
-                        <DialogDescription>
-                          Configure when peak hour pricing should be active for this product.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-6 py-4">
-                        {/* Enable/Disable Toggle */}
-                        <div className="flex items-center justify-between">
-                          <Label htmlFor="peak-enabled" className="text-sm font-medium">
-                            Enable Peak Hour Pricing
-                          </Label>
-                          <Switch
-                            id="peak-enabled"
-                            checked={peakHourSettings[product.id]?.enabled || false}
-                            onCheckedChange={(checked) => 
-                              updatePeakHourSettings(product.id.toString(), { enabled: checked })
-                            }
-                          />
-                        </div>
-
-                        {/* Time Settings */}
-                        <div className="space-y-4">
-                          <h4 className="text-sm font-medium text-black">Time Settings</h4>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label htmlFor="start-time">Start Time</Label>
-                              <Select
-                                value={peakHourSettings[product.id]?.startTime || "07:00"}
-                                onValueChange={(value) => 
-                                  updatePeakHourSettings(product.id.toString(), { startTime: value })
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {Array.from({length: 24}, (_, i) => {
-                                    const hour = i.toString().padStart(2, '0');
-                                    return (
-                                      <SelectItem key={`${hour}:00`} value={`${hour}:00`}>
-                                        {hour}:00
-                                      </SelectItem>
-                                    );
-                                  })}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="end-time">End Time</Label>
-                              <Select
-                                value={peakHourSettings[product.id]?.endTime || "09:00"}
-                                onValueChange={(value) => 
-                                  updatePeakHourSettings(product.id.toString(), { endTime: value })
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {Array.from({length: 24}, (_, i) => {
-                                    const hour = i.toString().padStart(2, '0');
-                                    return (
-                                      <SelectItem key={`${hour}:00`} value={`${hour}:00`}>
-                                        {hour}:00
-                                      </SelectItem>
-                                    );
-                                  })}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Days of Week */}
-                        <div className="space-y-4">
-                          <h4 className="text-sm font-medium text-black">Days of Week</h4>
-                          <div className="grid grid-cols-2 gap-2">
-                            {[
-                              { value: "monday", label: "Monday" },
-                              { value: "tuesday", label: "Tuesday" },
-                              { value: "wednesday", label: "Wednesday" },
-                              { value: "thursday", label: "Thursday" },
-                              { value: "friday", label: "Friday" },
-                              { value: "saturday", label: "Saturday" },
-                              { value: "sunday", label: "Sunday" }
-                            ].map((day) => (
-                              <div key={day.value} className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`${day.value}-${product.id}`}
-                                  checked={peakHourSettings[product.id]?.daysOfWeek?.includes(day.value) || false}
-                                  onCheckedChange={(checked) => {
-                                    const currentDays = peakHourSettings[product.id]?.daysOfWeek || [];
-                                    const newDays = checked 
-                                      ? [...currentDays, day.value]
-                                      : currentDays.filter(d => d !== day.value);
-                                    updatePeakHourSettings(product.id.toString(), { daysOfWeek: newDays });
-                                  }}
-                                />
-                                <Label htmlFor={`${day.value}-${product.id}`} className="text-sm">
-                                  {day.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Price Controls */}
-                        <div className="space-y-4">
-                          <h4 className="text-sm font-medium text-black">Price Controls</h4>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label htmlFor="min-price">Minimum Price ($)</Label>
-                              <Input
-                                id="min-price"
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                value={peakHourSettings[product.id]?.minPrice !== undefined && peakHourSettings[product.id]?.minPrice !== 0 
-                                  ? peakHourSettings[product.id].minPrice.toString() 
-                                  : (product.basePrice * 0.5).toFixed(2)}
-                                onChange={(e) => 
-                                  updatePeakHourSettings(product.id.toString(), { 
-                                    minPrice: parseFloat(e.target.value) || 0 
-                                  })
-                                }
-                                placeholder={(product.basePrice * 0.5).toFixed(2)}
-                              />
-                              <p className="text-xs text-muted-foreground">
-                                Lowest price this product can reach
-                              </p>
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="max-price">Maximum Price ($)</Label>
-                              <Input
-                                id="max-price"
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                value={peakHourSettings[product.id]?.maxPrice !== undefined && peakHourSettings[product.id]?.maxPrice !== 100 
-                                  ? peakHourSettings[product.id].maxPrice.toString() 
-                                  : (product.peakPrice * 1.5).toFixed(2)}
-                                onChange={(e) => 
-                                  updatePeakHourSettings(product.id.toString(), { 
-                                    maxPrice: parseFloat(e.target.value) || 100 
-                                  })
-                                }
-                                placeholder={(product.peakPrice * 1.5).toFixed(2)}
-                              />
-                              <p className="text-xs text-muted-foreground">
-                                Highest price this product can reach
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit">Save Changes</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleOpenPeakHoursDialog(product.id.toString())}
+                  >
+                    <Clock className="w-4 h-4 mr-2" />
+                    Peak Hours
+                  </Button>
                   <Button variant="outline" size="sm" className="flex-1">
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
@@ -1078,6 +974,26 @@ export default function Products() {
           ))}
           </div>
         )}
+
+        {/* Product Peak Hours Dialog */}
+        <ProductPeakHoursDialog
+          open={peakHoursDialogOpen}
+          onOpenChange={setPeakHoursDialogOpen}
+          onSave={handleSavePeakHoursSettings}
+          productName={selectedProductId ? products.find(p => p.id.toString() === selectedProductId)?.name || 'Product' : 'Product'}
+          productBasePrice={selectedProductId ? products.find(p => p.id.toString() === selectedProductId)?.basePrice || 0 : 0}
+          productPeakPrice={selectedProductId ? products.find(p => p.id.toString() === selectedProductId)?.peakPrice || 0 : 0}
+          initialSettings={selectedProductId ? peakHourSettings[selectedProductId] || getDefaultPeakHourSettings() : getDefaultPeakHourSettings()}
+        />
+
+        {/* Global Smart Pricing Dialog */}
+        <GlobalSmartPricingDialog
+          open={globalSmartPricingDialogOpen}
+          onOpenChange={setGlobalSmartPricingDialogOpen}
+          onSave={handleSaveGlobalSmartPricingSettings}
+          initialSettings={globalSmartPricingSettings}
+        />
+
       </div>
     </MainLayout>
   );

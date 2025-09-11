@@ -350,3 +350,40 @@
     background: linear-gradient(135deg, #e6eaf7 0%, #d1d9f0 100%) !important;
   }
 }
+
+/* Smooth sliding tab animation */
+[data-state="active"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Enhanced tab trigger transitions */
+[role="tab"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+}
+
+/* Smooth background sliding effect for tabs */
+[data-orientation="horizontal"][role="tablist"] {
+  position: relative;
+}
+
+[data-orientation="horizontal"][role="tablist"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  border-radius: calc(var(--radius) - 2px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+[data-state="active"][role="tab"] {
+  position: relative;
+  z-index: 1;
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
