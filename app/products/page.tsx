@@ -45,9 +45,22 @@ export default function Products() {
   // State for smart features
   const [smartPricingEnabled, setSmartPricingEnabled] = React.useState(true);
   const [smartInventoryEnabled, setSmartInventoryEnabled] = React.useState(true);
+  
+  // State for add product dialog
+  const [isAddProductOpen, setIsAddProductOpen] = React.useState(false);
+  const [newProduct, setNewProduct] = React.useState({
+    name: "",
+    category: "Hot Drinks",
+    basePrice: "",
+    minPrice: "",
+    maxPrice: "",
+    inventory: "",
+    status: "active"
+  });
 
-  // Products data
-  const products = [
+
+  // Products data - now stateful so we can add new products
+  const [products, setProducts] = React.useState([
     {
       id: 1,
       name: "Espresso",
@@ -55,7 +68,7 @@ export default function Products() {
       currentPrice: 3.50,
       basePrice: 3.25,
       peakPrice: 3.75,
-      wastePrevention: 0,
+      wastePrevention: 5, // System calculated
       inventory: 45,
       status: "active",
       lastUpdated: "2 min ago"
@@ -360,7 +373,8 @@ export default function Products() {
       status: "active",
       lastUpdated: "2 hours ago"
     }
-  ];
+  ]);
+
 
   // Calculate waste prevention pricing for each product
   const getWastePreventionPricing = (productId: string) => {
@@ -403,6 +417,63 @@ export default function Products() {
     });
   }, [searchQuery, selectedCategory]);
 
+  // Handle add product
+  const handleAddProduct = () => {
+    if (!newProduct.name.trim() || !newProduct.basePrice || !newProduct.minPrice || !newProduct.maxPrice || !newProduct.inventory) {
+      return; // Basic validation
+    }
+    
+    const basePrice = parseFloat(newProduct.basePrice);
+    const minPrice = parseFloat(newProduct.minPrice);
+    const maxPrice = parseFloat(newProduct.maxPrice);
+    
+    // Validate price ranges
+    if (minPrice >= maxPrice || basePrice < minPrice || basePrice > maxPrice) {
+      return; // Invalid price ranges
+    }
+    
+    const product = {
+      id: Math.max(...products.map(p => p.id)) + 1,
+      name: newProduct.name.trim(),
+      category: newProduct.category,
+      currentPrice: basePrice, // Start with base price
+      basePrice: basePrice,
+      peakPrice: maxPrice, // Keep peakPrice for compatibility
+      wastePrevention: Math.floor(Math.random() * 20), // System calculated
+      inventory: parseInt(newProduct.inventory),
+      status: newProduct.status,
+      lastUpdated: "Just now"
+    };
+    
+    // Add the product to the state
+    setProducts(prev => [...prev, product]);
+    
+    // Reset form and close dialog
+    setNewProduct({
+      name: "",
+      category: "Hot Drinks",
+      basePrice: "",
+      minPrice: "",
+      maxPrice: "",
+      inventory: "",
+      status: "active"
+    });
+    setIsAddProductOpen(false);
+  };
+
+  const resetAddProductForm = () => {
+    setNewProduct({
+      name: "",
+      category: "Hot Drinks",
+      basePrice: "",
+      minPrice: "",
+      maxPrice: "",
+      inventory: "",
+      status: "active"
+    });
+  };
+
+
   // Handle peak hour settings update
   const updatePeakHourSettings = (productId: string, settings: Partial<{
     enabled: boolean;
@@ -424,8 +495,8 @@ export default function Products() {
             startTime: settings.startTime ?? "07:00",
             endTime: settings.endTime ?? "09:00",
             daysOfWeek: settings.daysOfWeek ?? [],
-            minPrice: settings.minPrice,
-            maxPrice: settings.maxPrice,
+            minPrice: settings.minPrice ?? 0,
+            maxPrice: settings.maxPrice ?? 100,
             ...settings
           }
         };
@@ -494,10 +565,152 @@ export default function Products() {
             </div>
             
             {/* Add Product Button */}
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Product
-            </Button>
+            <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Product
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Add New Product</DialogTitle>
+                  <DialogDescription>
+                    Create a new product with pricing and inventory settings.
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="grid gap-6 py-4">
+                  {/* Basic Information */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="product-name">Product Name *</Label>
+                        <Input
+                          id="product-name"
+                          placeholder="e.g., Vanilla Latte"
+                          value={newProduct.name}
+                          onChange={(e) => setNewProduct(prev => ({ ...prev, name: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="product-category">Category *</Label>
+                        <Select
+                          value={newProduct.category}
+                          onValueChange={(value) => setNewProduct(prev => ({ ...prev, category: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Hot Drinks">Hot Drinks</SelectItem>
+                            <SelectItem value="Cold Drinks">Cold Drinks</SelectItem>
+                            <SelectItem value="Pastries">Pastries</SelectItem>
+                            <SelectItem value="Tea/Matcha">Tea/Matcha</SelectItem>
+                            <SelectItem value="Breakfast">Breakfast</SelectItem>
+                            <SelectItem value="Dessert">Dessert</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing Information */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium text-black">Pricing Range</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="min-price">Minimum Price ($) *</Label>
+                        <Input
+                          id="min-price"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="3.50"
+                          value={newProduct.minPrice}
+                          onChange={(e) => setNewProduct(prev => ({ ...prev, minPrice: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="base-price">Base Price ($) *</Label>
+                        <Input
+                          id="base-price"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="4.25"
+                          value={newProduct.basePrice}
+                          onChange={(e) => setNewProduct(prev => ({ ...prev, basePrice: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="max-price">Maximum Price ($) *</Label>
+                        <Input
+                          id="max-price"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="5.00"
+                          value={newProduct.maxPrice}
+                          onChange={(e) => setNewProduct(prev => ({ ...prev, maxPrice: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Smart pricing will adjust within this range based on demand and peak hours.
+                    </p>
+                  </div>
+
+                  {/* Inventory */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="inventory">Initial Inventory *</Label>
+                        <Input
+                          id="inventory"
+                          type="number"
+                          min="0"
+                          placeholder="25"
+                          value={newProduct.inventory}
+                          onChange={(e) => setNewProduct(prev => ({ ...prev, inventory: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="product-status">Status</Label>
+                        <Select
+                          value={newProduct.status}
+                          onValueChange={(value) => setNewProduct(prev => ({ ...prev, status: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="low">Low Stock</SelectItem>
+                            <SelectItem value="out">Out of Stock</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <DialogFooter className="gap-2">
+                  <Button variant="outline" onClick={resetAddProductForm}>
+                    Reset
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsAddProductOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleAddProduct}
+                    disabled={!newProduct.name.trim() || !newProduct.basePrice || !newProduct.minPrice || !newProduct.maxPrice || !newProduct.inventory}
+                  >
+                    Add Product
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 

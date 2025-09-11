@@ -17,6 +17,8 @@ import {
   AlertCircle,
   RefreshCw
 } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/app/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { sampleIngredients, sampleRecipes } from "@/lib/types/inventory";
 import { inventoryService } from "@/lib/services/inventory";
 import { useState, useEffect } from "react";
@@ -26,6 +28,20 @@ export default function InventoryManagement() {
   const [reorderSuggestions, setReorderSuggestions] = useState(inventoryService.getReorderSuggestions());
   const [ingredients, setIngredients] = useState(sampleIngredients);
   const [recipes, setRecipes] = useState(sampleRecipes);
+
+  // State for add ingredient dialog
+  const [isAddIngredientOpen, setIsAddIngredientOpen] = useState(false);
+  const [newIngredient, setNewIngredient] = useState({
+    name: "",
+    category: "Coffee",
+    unit: "g",
+    currentStock: "",
+    minStock: "",
+    maxStock: "",
+    costPerUnit: "",
+    supplier: "",
+    status: "active"
+  });
 
   const getStockStatus = (ingredient: any) => {
     const percentage = (ingredient.currentStock / ingredient.maxStock) * 100;
@@ -50,6 +66,68 @@ export default function InventoryManagement() {
     setReorderSuggestions(inventoryService.getReorderSuggestions());
   };
 
+  // Handle add ingredient
+  const handleAddIngredient = () => {
+    if (!newIngredient.name.trim() || !newIngredient.currentStock || !newIngredient.minStock || !newIngredient.maxStock || !newIngredient.costPerUnit) {
+      return; // Basic validation
+    }
+    
+    const currentStock = parseFloat(newIngredient.currentStock);
+    const minStock = parseFloat(newIngredient.minStock);
+    const maxStock = parseFloat(newIngredient.maxStock);
+    const costPerUnit = parseFloat(newIngredient.costPerUnit);
+    
+    // Validate stock ranges
+    if (minStock >= maxStock || currentStock < minStock || currentStock > maxStock) {
+      return; // Invalid stock ranges
+    }
+    
+    const ingredient = {
+      id: Math.max(...ingredients.map(i => i.id)) + 1,
+      name: newIngredient.name.trim(),
+      category: newIngredient.category,
+      unit: newIngredient.unit,
+      currentStock: currentStock,
+      minStock: minStock,
+      maxStock: maxStock,
+      costPerUnit: costPerUnit,
+      supplier: newIngredient.supplier.trim(),
+      status: newIngredient.status,
+      lastUpdated: "Just now"
+    };
+    
+    // Add the ingredient to the state
+    setIngredients(prev => [...prev, ingredient]);
+    
+    // Reset form and close dialog
+    setNewIngredient({
+      name: "",
+      category: "Coffee",
+      unit: "g",
+      currentStock: "",
+      minStock: "",
+      maxStock: "",
+      costPerUnit: "",
+      supplier: "",
+      status: "active"
+    });
+    setIsAddIngredientOpen(false);
+  };
+
+  const resetAddIngredientForm = () => {
+    setNewIngredient({
+      name: "",
+      category: "Coffee",
+      unit: "g",
+      currentStock: "",
+      minStock: "",
+      maxStock: "",
+      costPerUnit: "",
+      supplier: "",
+      status: "active"
+    });
+  };
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -66,10 +144,179 @@ export default function InventoryManagement() {
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
             </Button>
-            <Button size="sm">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Ingredient
-            </Button>
+            <Dialog open={isAddIngredientOpen} onOpenChange={setIsAddIngredientOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Ingredient
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Add New Ingredient</DialogTitle>
+                  <DialogDescription>
+                    Add a new ingredient to your inventory with stock and supplier information.
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="grid gap-6 py-4">
+                  {/* Basic Information */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="ingredient-name">Ingredient Name *</Label>
+                        <Input
+                          id="ingredient-name"
+                          placeholder="e.g., Oat Milk"
+                          value={newIngredient.name}
+                          onChange={(e) => setNewIngredient(prev => ({ ...prev, name: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="ingredient-category">Category *</Label>
+                        <Select
+                          value={newIngredient.category}
+                          onValueChange={(value) => setNewIngredient(prev => ({ ...prev, category: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Coffee">Coffee</SelectItem>
+                            <SelectItem value="Dairy">Dairy</SelectItem>
+                            <SelectItem value="Syrups">Syrups</SelectItem>
+                            <SelectItem value="Toppings">Toppings</SelectItem>
+                            <SelectItem value="Bakery">Bakery</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stock Information */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium text-black">Stock Management</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="current-stock">Current Stock *</Label>
+                        <Input
+                          id="current-stock"
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          placeholder="25.5"
+                          value={newIngredient.currentStock}
+                          onChange={(e) => setNewIngredient(prev => ({ ...prev, currentStock: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="min-stock">Min Stock *</Label>
+                        <Input
+                          id="min-stock"
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          placeholder="5.0"
+                          value={newIngredient.minStock}
+                          onChange={(e) => setNewIngredient(prev => ({ ...prev, minStock: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="max-stock">Max Stock *</Label>
+                        <Input
+                          id="max-stock"
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          placeholder="50.0"
+                          value={newIngredient.maxStock}
+                          onChange={(e) => setNewIngredient(prev => ({ ...prev, maxStock: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="unit">Unit</Label>
+                        <Select
+                          value={newIngredient.unit}
+                          onValueChange={(value) => setNewIngredient(prev => ({ ...prev, unit: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="g">Grams (g)</SelectItem>
+                            <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                            <SelectItem value="L">Liters (L)</SelectItem>
+                            <SelectItem value="ml">Milliliters (ml)</SelectItem>
+                            <SelectItem value="pcs">Pieces</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cost-per-unit">Cost per Unit ($) *</Label>
+                        <Input
+                          id="cost-per-unit"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="12.50"
+                          value={newIngredient.costPerUnit}
+                          onChange={(e) => setNewIngredient(prev => ({ ...prev, costPerUnit: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Supplier Information */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="supplier">Supplier</Label>
+                        <Input
+                          id="supplier"
+                          placeholder="e.g., Local Supplier"
+                          value={newIngredient.supplier}
+                          onChange={(e) => setNewIngredient(prev => ({ ...prev, supplier: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="ingredient-status">Status</Label>
+                        <Select
+                          value={newIngredient.status}
+                          onValueChange={(value) => setNewIngredient(prev => ({ ...prev, status: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="low">Low Stock</SelectItem>
+                            <SelectItem value="out">Out of Stock</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <DialogFooter className="gap-2">
+                  <Button variant="outline" onClick={resetAddIngredientForm}>
+                    Reset
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsAddIngredientOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleAddIngredient}
+                    disabled={!newIngredient.name.trim() || !newIngredient.currentStock || !newIngredient.minStock || !newIngredient.maxStock || !newIngredient.costPerUnit}
+                  >
+                    Add Ingredient
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
