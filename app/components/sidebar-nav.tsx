@@ -58,8 +58,8 @@ export function SidebarNav() {
         <div className="flex items-center space-x-2">
           <Coffee className="h-8 w-8 text-primary" />
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-foreground">SmartPricing</span>
-            <span className="text-xs text-muted-foreground">Coffee Shop POS</span>
+            <span className="text-lg font-bold text-foreground">Napoleon</span>
+            <span className="text-xs text-muted-foreground">Smart Business Management</span>
           </div>
         </div>
       </SidebarHeader>

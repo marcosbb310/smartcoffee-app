@@ -29,9 +29,9 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Smart Coffee</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Napoleon Dashboard</h1>
             <p className="text-muted-foreground">
-              Intelligent pricing and inventory management
+              Business intelligence and smart management
             </p>
           </div>
           

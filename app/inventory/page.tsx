@@ -151,7 +151,7 @@ export default function InventoryManagement() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Inventory</h1>
             <p className="text-muted-foreground">
-              Track ingredients and manage automatic reordering
+              Track inventory and manage automatic reordering
             </p>
           </div>
           <div className="flex items-center space-x-2">
@@ -349,13 +349,13 @@ export default function InventoryManagement() {
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Ingredients</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Items</CardTitle>
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{inventoryStatus.totalIngredients}</div>
               <p className="text-xs text-muted-foreground">
-                Active ingredients tracked
+                Active items tracked
               </p>
             </CardContent>
           </Card>
@@ -403,9 +403,9 @@ export default function InventoryManagement() {
         {/* Ingredients List */}
         <Card>
           <CardHeader>
-            <CardTitle>Ingredients</CardTitle>
+            <CardTitle>Inventory Items</CardTitle>
             <CardDescription>
-              Track individual ingredients and their current stock levels
+              Track individual items and their current stock levels
             </CardDescription>
           </CardHeader>
           <CardContent>

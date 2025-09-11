@@ -24,20 +24,20 @@ export default function Home() {
           <div className="space-y-6">
             <Badge variant="secondary" className="w-fit mx-auto">
               <Zap className="w-3 h-3 mr-1" />
-              Smart Coffee Management
+              Smart Business Management
             </Badge>
             
             <h1 className="text-6xl font-bold tracking-tight">
-              Smart Coffee
+              Napoleon
               <span className="block text-4xl text-blue-600 mt-2">
-                Pricing & Inventory
+                Business Intelligence
               </span>
             </h1>
             
             <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              Intelligent pricing based on peak hours and inventory levels, 
-              with automated ingredient tracking and reordering. 
-              Maximize revenue while minimizing waste.
+              AI-powered pricing optimization and inventory management for cafes, 
+              restaurants, and retail businesses. Maximize revenue while minimizing waste 
+              with intelligent automation.
             </p>
           </div>
 
@@ -149,9 +149,9 @@ export default function Home() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl font-bold text-blue-600">1</span>
                 </div>
-                <h3 className="text-xl font-semibold">Set Up Recipes</h3>
+                <h3 className="text-xl font-semibold">Set Up Products</h3>
                 <p className="text-muted-foreground">
-                  Define how much of each ingredient goes into each product
+                  Define your products and their ingredient requirements
                 </p>
               </div>
               <div className="text-center space-y-4">
@@ -160,7 +160,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold">Track Sales</h3>
                 <p className="text-muted-foreground">
-                  System automatically tracks ingredient usage as products are sold
+                  System automatically tracks inventory usage as products are sold
                 </p>
               </div>
               <div className="text-center space-y-4">
@@ -182,7 +182,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium">Never run out of ingredients</span>
+                  <span className="font-medium">Never run out of inventory</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-blue-600" />
@@ -190,7 +190,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium">Reduce food waste with smart pricing</span>
+                  <span className="font-medium">Reduce waste with smart pricing</span>
                 </div>
               </div>
               <div className="space-y-4">
@@ -214,7 +214,7 @@ export default function Home() {
           <div className="mt-16">
             <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
             <p className="text-muted-foreground mb-8">
-              Start managing your coffee shop smarter today
+              Start managing your business smarter today
             </p>
             <Button size="lg" className="px-8" asChild>
               <Link href="/dashboard">
