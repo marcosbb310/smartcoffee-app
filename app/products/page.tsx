@@ -420,12 +420,12 @@ export default function Products() {
         return {
           ...prev,
           [productId]: {
-            enabled: false,
-            startTime: "07:00",
-            endTime: "09:00",
-            daysOfWeek: [],
-            minPrice: 0,
-            maxPrice: 100,
+            enabled: settings.enabled ?? false,
+            startTime: settings.startTime ?? "07:00",
+            endTime: settings.endTime ?? "09:00",
+            daysOfWeek: settings.daysOfWeek ?? [],
+            minPrice: settings.minPrice,
+            maxPrice: settings.maxPrice,
             ...settings
           }
         };
@@ -811,7 +811,9 @@ export default function Products() {
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                value={peakHourSettings[product.id]?.minPrice ?? (product.basePrice * 0.5).toFixed(2)}
+                                value={peakHourSettings[product.id]?.minPrice !== undefined && peakHourSettings[product.id]?.minPrice !== 0 
+                                  ? peakHourSettings[product.id].minPrice.toString() 
+                                  : (product.basePrice * 0.5).toFixed(2)}
                                 onChange={(e) => 
                                   updatePeakHourSettings(product.id.toString(), { 
                                     minPrice: parseFloat(e.target.value) || 0 
@@ -830,7 +832,9 @@ export default function Products() {
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                value={peakHourSettings[product.id]?.maxPrice ?? (product.peakPrice * 1.5).toFixed(2)}
+                                value={peakHourSettings[product.id]?.maxPrice !== undefined && peakHourSettings[product.id]?.maxPrice !== 100 
+                                  ? peakHourSettings[product.id].maxPrice.toString() 
+                                  : (product.peakPrice * 1.5).toFixed(2)}
                                 onChange={(e) => 
                                   updatePeakHourSettings(product.id.toString(), { 
                                     maxPrice: parseFloat(e.target.value) || 100 
