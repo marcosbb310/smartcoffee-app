@@ -33,7 +33,7 @@ export default function InventoryManagement() {
   const [isAddIngredientOpen, setIsAddIngredientOpen] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
     name: "",
-    category: "Coffee",
+    category: "coffee",
     unit: "g",
     currentStock: "",
     minStock: "",
@@ -68,7 +68,20 @@ export default function InventoryManagement() {
 
   // Handle add ingredient
   const handleAddIngredient = () => {
-    if (!newIngredient.name.trim() || !newIngredient.currentStock || !newIngredient.minStock || !newIngredient.maxStock || !newIngredient.costPerUnit) {
+    console.log("Add ingredient clicked", newIngredient);
+    
+    if (!newIngredient.name.trim() || 
+        newIngredient.currentStock === "" || 
+        newIngredient.minStock === "" || 
+        newIngredient.maxStock === "" || 
+        newIngredient.costPerUnit === "") {
+      console.log("Validation failed", {
+        name: newIngredient.name.trim(),
+        currentStock: newIngredient.currentStock,
+        minStock: newIngredient.minStock,
+        maxStock: newIngredient.maxStock,
+        costPerUnit: newIngredient.costPerUnit
+      });
       return; // Basic validation
     }
     
@@ -83,26 +96,28 @@ export default function InventoryManagement() {
     }
     
     const ingredient = {
-      id: Math.max(...ingredients.map(i => i.id)) + 1,
+      id: `ingredient-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: newIngredient.name.trim(),
-      category: newIngredient.category,
       unit: newIngredient.unit,
       currentStock: currentStock,
       minStock: minStock,
       maxStock: maxStock,
       costPerUnit: costPerUnit,
       supplier: newIngredient.supplier.trim(),
-      status: newIngredient.status,
-      lastUpdated: "Just now"
+      shelfLife: 30, // Default shelf life
+      category: newIngredient.category.toLowerCase() as "dairy" | "coffee" | "sweetener" | "pastry" | "other",
+      lastRestocked: new Date(),
+      isActive: newIngredient.status === "active"
     };
     
     // Add the ingredient to the state
     setIngredients(prev => [...prev, ingredient]);
+    console.log("Ingredient added successfully", ingredient);
     
     // Reset form and close dialog
     setNewIngredient({
       name: "",
-      category: "Coffee",
+      category: "coffee",
       unit: "g",
       currentStock: "",
       minStock: "",
@@ -117,7 +132,7 @@ export default function InventoryManagement() {
   const resetAddIngredientForm = () => {
     setNewIngredient({
       name: "",
-      category: "Coffee",
+      category: "coffee",
       unit: "g",
       currentStock: "",
       minStock: "",
@@ -182,12 +197,11 @@ export default function InventoryManagement() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Coffee">Coffee</SelectItem>
-                            <SelectItem value="Dairy">Dairy</SelectItem>
-                            <SelectItem value="Syrups">Syrups</SelectItem>
-                            <SelectItem value="Toppings">Toppings</SelectItem>
-                            <SelectItem value="Bakery">Bakery</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
+                            <SelectItem value="coffee">Coffee</SelectItem>
+                            <SelectItem value="dairy">Dairy</SelectItem>
+                            <SelectItem value="sweetener">Sweetener</SelectItem>
+                            <SelectItem value="pastry">Pastry</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -309,8 +323,19 @@ export default function InventoryManagement() {
                     Cancel
                   </Button>
                   <Button 
-                    onClick={handleAddIngredient}
-                    disabled={!newIngredient.name.trim() || !newIngredient.currentStock || !newIngredient.minStock || !newIngredient.maxStock || !newIngredient.costPerUnit}
+                    onClick={() => {
+                      console.log("Button clicked!");
+                      handleAddIngredient();
+                    }}
+                    disabled={(() => {
+                      const isDisabled = !newIngredient.name.trim() || 
+                                       newIngredient.currentStock === "" || 
+                                       newIngredient.minStock === "" || 
+                                       newIngredient.maxStock === "" || 
+                                       newIngredient.costPerUnit === "";
+                      console.log("Button disabled state:", isDisabled, "Form state:", newIngredient);
+                      return isDisabled;
+                    })()}
                   >
                     Add Ingredient
                   </Button>
