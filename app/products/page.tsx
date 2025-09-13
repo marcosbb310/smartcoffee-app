@@ -24,8 +24,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { inventoryService } from "@/lib/services/inventory";
 import { PeakHour, DayPeakHours, PeakHourSettings, DAYS_OF_WEEK } from "@/lib/types/peak-hours";
+import { sampleIngredients, sampleRecipes } from "@/lib/types/inventory";
 import { ProductPeakHoursDialog } from "@/app/components/product-peak-hours-dialog";
 import { GlobalSmartPricingDialog } from "@/app/components/global-smart-pricing-dialog";
+import { ProductIngredientsDialog } from "@/app/components/product-ingredients-dialog";
 
 export default function Products() {
   // State for peak hour settings - now using the new structure
@@ -72,6 +74,10 @@ export default function Products() {
   const [peakHoursDialogOpen, setPeakHoursDialogOpen] = React.useState(false);
   const [selectedProductId, setSelectedProductId] = React.useState<string | null>(null);
   
+  // State for ingredients dialog
+  const [ingredientsDialogOpen, setIngredientsDialogOpen] = React.useState(false);
+  const [selectedProductForIngredients, setSelectedProductForIngredients] = React.useState<string | null>(null);
+  
   // State for global smart pricing
   const [globalSmartPricingDialogOpen, setGlobalSmartPricingDialogOpen] = React.useState(false);
   const [globalSmartPricingSettings, setGlobalSmartPricingSettings] = React.useState({
@@ -95,12 +101,7 @@ export default function Products() {
 
   const [newProduct, setNewProduct] = React.useState({
     name: "",
-    category: "Hot Drinks",
-    basePrice: "",
-    minPrice: "",
-    maxPrice: "",
-    inventory: "",
-    status: "active"
+    basePrice: ""
   });
 
 
@@ -417,6 +418,42 @@ export default function Products() {
       inventory: 7,
       status: "active",
       lastUpdated: "2 hours ago"
+    },
+    {
+      id: 27,
+      name: "Green Tea Latte",
+      category: "Tea/Matcha",
+      currentPrice: 5.25,
+      basePrice: 5.00,
+      peakPrice: 5.50,
+      wastePrevention: 8,
+      inventory: 23,
+      status: "active",
+      lastUpdated: "5 min ago"
+    },
+    {
+      id: 28,
+      name: "Chai Latte",
+      category: "Tea/Matcha",
+      currentPrice: 4.95,
+      basePrice: 4.75,
+      peakPrice: 5.25,
+      wastePrevention: 12,
+      inventory: 18,
+      status: "active",
+      lastUpdated: "8 min ago"
+    },
+    {
+      id: 29,
+      name: "Frappuccino",
+      category: "Cold Drinks",
+      currentPrice: 5.75,
+      basePrice: 5.50,
+      peakPrice: 6.00,
+      wastePrevention: 15,
+      inventory: 14,
+      status: "low",
+      lastUpdated: "12 min ago"
     }
   ]);
 
@@ -464,29 +501,22 @@ export default function Products() {
 
   // Handle add product
   const handleAddProduct = () => {
-    if (!newProduct.name.trim() || !newProduct.basePrice || !newProduct.minPrice || !newProduct.maxPrice || !newProduct.inventory) {
+    if (!newProduct.name.trim() || !newProduct.basePrice) {
       return; // Basic validation
     }
     
     const basePrice = parseFloat(newProduct.basePrice);
-    const minPrice = parseFloat(newProduct.minPrice);
-    const maxPrice = parseFloat(newProduct.maxPrice);
-    
-    // Validate price ranges
-    if (minPrice >= maxPrice || basePrice < minPrice || basePrice > maxPrice) {
-      return; // Invalid price ranges
-    }
     
     const product = {
       id: Math.max(...products.map(p => p.id)) + 1,
       name: newProduct.name.trim(),
-      category: newProduct.category,
+      category: "Hot Drinks", // Default category
       currentPrice: basePrice, // Start with base price
       basePrice: basePrice,
-      peakPrice: maxPrice, // Keep peakPrice for compatibility
+      peakPrice: basePrice * 1.2, // Default 20% peak price increase
       wastePrevention: Math.floor(Math.random() * 20), // System calculated
-      inventory: parseInt(newProduct.inventory),
-      status: newProduct.status,
+      inventory: 0, // Default inventory
+      status: "active",
       lastUpdated: "Just now"
     };
     
@@ -496,12 +526,7 @@ export default function Products() {
     // Reset form and close dialog
     setNewProduct({
       name: "",
-      category: "Hot Drinks",
-      basePrice: "",
-      minPrice: "",
-      maxPrice: "",
-      inventory: "",
-      status: "active"
+      basePrice: ""
     });
     setIsAddProductOpen(false);
   };
@@ -509,12 +534,7 @@ export default function Products() {
   const resetAddProductForm = () => {
     setNewProduct({
       name: "",
-      category: "Hot Drinks",
-      basePrice: "",
-      minPrice: "",
-      maxPrice: "",
-      inventory: "",
-      status: "active"
+      basePrice: ""
     });
   };
 
@@ -563,6 +583,12 @@ export default function Products() {
   const handleOpenPeakHoursDialog = (productId: string) => {
     setSelectedProductId(productId);
     setPeakHoursDialogOpen(true);
+  };
+
+  // Handle opening ingredients dialog
+  const handleOpenIngredientsDialog = (productId: string) => {
+    setSelectedProductForIngredients(productId);
+    setIngredientsDialogOpen(true);
   };
 
   // Handle saving peak hours settings
@@ -648,121 +674,56 @@ export default function Products() {
                 <DialogHeader>
                   <DialogTitle>Add New Product</DialogTitle>
                   <DialogDescription>
-                    Create a new product with pricing and inventory settings.
+                    Create a new product with basic pricing information.
                   </DialogDescription>
                 </DialogHeader>
                 
                 <div className="grid gap-6 py-4">
                   {/* Basic Information */}
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="product-name">Product Name *</Label>
-                        <Input
-                          id="product-name"
-                          placeholder="e.g., Vanilla Latte"
-                          value={newProduct.name}
-                          onChange={(e) => setNewProduct(prev => ({ ...prev, name: e.target.value }))}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="product-category">Category *</Label>
-                        <Select
-                          value={newProduct.category}
-                          onValueChange={(value) => setNewProduct(prev => ({ ...prev, category: value }))}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Hot Drinks">Hot Drinks</SelectItem>
-                            <SelectItem value="Cold Drinks">Cold Drinks</SelectItem>
-                            <SelectItem value="Pastries">Pastries</SelectItem>
-                            <SelectItem value="Tea/Matcha">Tea/Matcha</SelectItem>
-                            <SelectItem value="Breakfast">Breakfast</SelectItem>
-                            <SelectItem value="Dessert">Dessert</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="product-name">Product Name *</Label>
+                      <Input
+                        id="product-name"
+                        placeholder="e.g., Vanilla Latte"
+                        value={newProduct.name}
+                        onChange={(e) => setNewProduct(prev => ({ ...prev, name: e.target.value }))}
+                      />
                     </div>
                   </div>
 
                   {/* Pricing Information */}
                   <div className="space-y-4">
-                    <h4 className="text-sm font-medium text-black">Pricing Range</h4>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="min-price">Minimum Price ($) *</Label>
-                        <Input
-                          id="min-price"
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="3.50"
-                          value={newProduct.minPrice}
-                          onChange={(e) => setNewProduct(prev => ({ ...prev, minPrice: e.target.value }))}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="base-price">Base Price ($) *</Label>
-                        <Input
-                          id="base-price"
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="4.25"
-                          value={newProduct.basePrice}
-                          onChange={(e) => setNewProduct(prev => ({ ...prev, basePrice: e.target.value }))}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="max-price">Maximum Price ($) *</Label>
-                        <Input
-                          id="max-price"
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="5.00"
-                          value={newProduct.maxPrice}
-                          onChange={(e) => setNewProduct(prev => ({ ...prev, maxPrice: e.target.value }))}
-                        />
-                      </div>
+                    <h4 className="text-sm font-medium text-black">Pricing</h4>
+                    <div className="space-y-2">
+                      <Label htmlFor="base-price">Base Price ($) *</Label>
+                      <Input
+                        id="base-price"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        placeholder="4.25"
+                        value={newProduct.basePrice}
+                        onChange={(e) => setNewProduct(prev => ({ ...prev, basePrice: e.target.value }))}
+                      />
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Smart pricing will adjust within this range based on demand and peak hours.
+                      Smart pricing will adjust this price based on demand and peak hours.
                     </p>
                   </div>
 
-                  {/* Inventory */}
+                  {/* Recipe Section */}
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="inventory">Initial Inventory *</Label>
-                        <Input
-                          id="inventory"
-                          type="number"
-                          min="0"
-                          placeholder="25"
-                          value={newProduct.inventory}
-                          onChange={(e) => setNewProduct(prev => ({ ...prev, inventory: e.target.value }))}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="product-status">Status</Label>
-                        <Select
-                          value={newProduct.status}
-                          onValueChange={(value) => setNewProduct(prev => ({ ...prev, status: value }))}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="low">Low Stock</SelectItem>
-                            <SelectItem value="out">Out of Stock</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                    <h4 className="text-sm font-medium text-black">Recipe</h4>
+                    <div className="p-4 border-2 border-dashed border-muted-foreground/25 rounded-lg text-center">
+                      <Package className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Define the ingredients and quantities needed for this product
+                      </p>
+                      <Button variant="outline" className="w-full">
+                        <Package className="w-4 h-4 mr-2" />
+                        Create Recipe
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -776,7 +737,7 @@ export default function Products() {
                   </Button>
                   <Button 
                     onClick={handleAddProduct}
-                    disabled={!newProduct.name.trim() || !newProduct.basePrice || !newProduct.minPrice || !newProduct.maxPrice || !newProduct.inventory}
+                    disabled={!newProduct.name.trim() || !newProduct.basePrice}
                   >
                     Add Product
                   </Button>
@@ -891,13 +852,18 @@ export default function Products() {
             <Card key={product.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1">
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2">
                     <CardTitle className="text-lg">{product.name}</CardTitle>
-                    <CardDescription className="flex items-center space-x-2">
-                      <Package className="w-4 h-4" />
-                      <span>{product.category}</span>
-                    </CardDescription>
+                    <Badge variant="outline" className="text-xs font-mono">
+                      ID: {product.id}
+                    </Badge>
                   </div>
+                  <CardDescription className="flex items-center space-x-2">
+                    <Package className="w-4 h-4" />
+                    <span>{product.category}</span>
+                  </CardDescription>
+                </div>
                   <Badge className="text-black" style={{ backgroundColor: '#e6eaf7' }}>
                     {product.status}
                   </Badge>
@@ -964,9 +930,14 @@ export default function Products() {
                     <Clock className="w-4 h-4 mr-2" />
                     Peak Hours
                   </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleOpenIngredientsDialog(product.id.toString())}
+                  >
                     <Settings className="w-4 h-4 mr-2" />
-                    Settings
+                    Ingredients
                   </Button>
                 </div>
               </CardContent>
@@ -992,6 +963,16 @@ export default function Products() {
           onOpenChange={setGlobalSmartPricingDialogOpen}
           onSave={handleSaveGlobalSmartPricingSettings}
           initialSettings={globalSmartPricingSettings}
+        />
+
+        {/* Product Ingredients Dialog */}
+        <ProductIngredientsDialog
+          open={ingredientsDialogOpen}
+          onOpenChange={setIngredientsDialogOpen}
+          productName={selectedProductForIngredients ? products.find(p => p.id.toString() === selectedProductForIngredients)?.name || 'Product' : 'Product'}
+          productId={selectedProductForIngredients || ''}
+          ingredients={sampleIngredients}
+          recipe={selectedProductForIngredients ? sampleRecipes[selectedProductForIngredients] || [] : []}
         />
 
       </div>

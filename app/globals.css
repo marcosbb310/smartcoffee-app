@@ -387,3 +387,167 @@
   color: hsl(var(--foreground)) !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
 }
+
+/* Fix for blurry text in dialogs */
+[data-radix-dialog-content] {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}
+
+/* Ensure crisp text rendering in dialog content */
+[data-radix-dialog-content] * {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Specific fix for recipe builder dialog */
+.recipe-builder-dialog {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}
+
+.recipe-builder-dialog * {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Fix for grid layout in recipe builder */
+.recipe-builder-dialog .grid {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Fix for product cards in recipe builder */
+.recipe-builder-dialog .p-4 {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Disable GPU acceleration for recipe builder content */
+.recipe-builder-dialog .space-y-3,
+.recipe-builder-dialog .space-y-4,
+.recipe-builder-dialog .space-y-6 {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}
+
+/* Force hardware acceleration off for text elements */
+.recipe-builder-dialog h3,
+.recipe-builder-dialog h4,
+.recipe-builder-dialog h5,
+.recipe-builder-dialog p,
+.recipe-builder-dialog span {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}
+
+/* Specific fix for recipe builder dialog content */
+[data-radix-dialog-content] .grid,
+[data-radix-dialog-content] .space-y-4,
+[data-radix-dialog-content] .space-y-6,
+[data-radix-dialog-content] .p-4,
+[data-radix-dialog-content] .border,
+[data-radix-dialog-content] .rounded-lg {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Fix for product cards specifically */
+[data-radix-dialog-content] .hover\:bg-muted\/50:hover {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Specific fix for recipe builder dialog */
+.recipe-builder-dialog {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}
+
+.recipe-builder-dialog * {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Fix for grid layout in recipe builder */
+.recipe-builder-dialog .grid {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Fix for product cards in recipe builder */
+.recipe-builder-dialog .p-4 {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Disable GPU acceleration for recipe builder content */
+.recipe-builder-dialog .space-y-3,
+.recipe-builder-dialog .space-y-4,
+.recipe-builder-dialog .space-y-6 {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}
+
+/* Force hardware acceleration off for text elements */
+.recipe-builder-dialog h3,
+.recipe-builder-dialog h4,
+.recipe-builder-dialog h5,
+.recipe-builder-dialog p,
+.recipe-builder-dialog span {
+  transform: none !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  will-change: auto !important;
+}

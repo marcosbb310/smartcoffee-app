@@ -102,9 +102,38 @@ export const ProductPeakHoursDialog = ({
     const peakHourIndex = updatedDays[dayIndex].peakHours.findIndex(ph => ph.id === peakHourId);
     
     if (peakHourIndex !== -1) {
+      let processedValue = value;
+      
+      // Convert percentage to decimal multiplier for multiplier field
+      if (field === 'multiplier') {
+        const percentage = parseFloat(value as string) || 0;
+        processedValue = 1 + (percentage / 100);
+      }
+      
       updatedDays[dayIndex].peakHours[peakHourIndex] = {
         ...updatedDays[dayIndex].peakHours[peakHourIndex],
-        [field]: value
+        [field]: processedValue
+      };
+      setSettings({ ...settings, days: updatedDays });
+    }
+  };
+
+  const handlePeakHourPriceChange = (
+    dayIndex: number, 
+    peakHourId: string, 
+    price: string
+  ) => {
+    const updatedDays = [...settings.days];
+    const peakHourIndex = updatedDays[dayIndex].peakHours.findIndex(ph => ph.id === peakHourId);
+    
+    if (peakHourIndex !== -1) {
+      const priceValue = parseFloat(price) || productBasePrice;
+      const percentage = getPercentageFromPrice(priceValue);
+      const multiplier = 1 + (percentage / 100);
+      
+      updatedDays[dayIndex].peakHours[peakHourIndex] = {
+        ...updatedDays[dayIndex].peakHours[peakHourIndex],
+        multiplier
       };
       setSettings({ ...settings, days: updatedDays });
     }
@@ -120,8 +149,36 @@ export const ProductPeakHoursDialog = ({
   };
 
   const handleGlobalMultiplierChange = (value: string) => {
-    const multiplier = parseFloat(value) || 1.0;
+    // Convert percentage to decimal multiplier (e.g., 15% -> 1.15)
+    const percentage = parseFloat(value) || 0;
+    const multiplier = 1 + (percentage / 100);
     setSettings({ ...settings, globalMultiplier: multiplier });
+  };
+
+  const handleGlobalPriceChange = (value: string) => {
+    // Convert price to percentage and then to multiplier
+    const price = parseFloat(value) || productBasePrice;
+    const percentage = getPercentageFromPrice(price);
+    const multiplier = 1 + (percentage / 100);
+    setSettings({ ...settings, globalMultiplier: multiplier });
+  };
+
+  // Convert decimal multiplier to percentage for display
+  const getPercentageFromMultiplier = (multiplier: number): number => {
+    return Math.round((multiplier - 1) * 100);
+  };
+
+  // Convert price to percentage based on base price
+  const getPercentageFromPrice = (price: number): number => {
+    if (productBasePrice === 0) return 0;
+    const multiplier = price / productBasePrice;
+    return Math.round((multiplier - 1) * 100);
+  };
+
+  // Convert percentage to price based on base price
+  const getPriceFromPercentage = (percentage: number): number => {
+    const multiplier = 1 + (percentage / 100);
+    return productBasePrice * multiplier;
   };
 
   const handleSave = () => {
@@ -155,21 +212,51 @@ export const ProductPeakHoursDialog = ({
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* Product Base Price */}
+          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-medium text-blue-900">Product Base Price</h4>
+                <p className="text-xs text-blue-700">Current base price for {productName}</p>
+              </div>
+              <div className="text-right">
+                <span className="text-2xl font-bold text-blue-900">${productBasePrice.toFixed(2)}</span>
+                <p className="text-xs text-blue-700">Base Price</p>
+              </div>
+            </div>
+          </div>
+
           {/* Global Multiplier */}
           <div className="space-y-2">
-            <Label htmlFor="global-multiplier">Default Peak Hour Multiplier</Label>
-            <Input
-              id="global-multiplier"
-              type="number"
-              step="0.01"
-              min="1.0"
-              max="3.0"
-              value={settings.globalMultiplier}
-              onChange={(e) => handleGlobalMultiplierChange(e.target.value)}
-              placeholder="1.15"
-            />
+            <Label htmlFor="global-multiplier">Default Peak Hour Price Increase (%)</Label>
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1">
+                <Input
+                  id="global-multiplier"
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="200"
+                  value={getPercentageFromMultiplier(settings.globalMultiplier)}
+                  onChange={(e) => handleGlobalMultiplierChange(e.target.value)}
+                  placeholder="15"
+                  className="pr-10"
+                />
+                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">%</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg border border-green-200 flex-1">
+                <span className="text-sm text-green-700 whitespace-nowrap">New Price:</span>
+                <Input
+                  type="text"
+                  value={(productBasePrice * settings.globalMultiplier).toFixed(2)}
+                  onChange={(e) => handleGlobalPriceChange(e.target.value)}
+                  className="text-lg font-bold text-green-900 bg-transparent border-none p-0 h-auto w-full focus:ring-0 focus:border-none"
+                  style={{ color: '#14532d' }}
+                />
+              </div>
+            </div>
             <p className="text-xs text-muted-foreground">
-              Default multiplier for all peak hours (e.g., 1.15 = 15% increase)
+              Default percentage increase for all peak hours
             </p>
           </div>
 
@@ -219,53 +306,73 @@ export const ProductPeakHoursDialog = ({
                       ) : (
                         <div className="space-y-2">
                           {dayData.peakHours.map((peakHour, peakIndex) => (
-                            <div key={peakHour.id} className="flex items-center gap-2 p-2 bg-muted/50 rounded">
-                              <div className="flex-1 grid grid-cols-4 gap-2">
-                                <Input
-                                  value={peakHour.label || ''}
-                                  onChange={(e) => 
-                                    handlePeakHourChange(dayIndex, peakHour.id, 'label', e.target.value)
-                                  }
-                                  placeholder="Label"
-                                  className="text-xs h-8"
-                                />
-                                <Input
-                                  type="time"
-                                  value={peakHour.startTime}
-                                  onChange={(e) => 
-                                    handlePeakHourChange(dayIndex, peakHour.id, 'startTime', e.target.value)
-                                  }
-                                  className="text-xs h-8"
-                                />
-                                <Input
-                                  type="time"
-                                  value={peakHour.endTime}
-                                  onChange={(e) => 
-                                    handlePeakHourChange(dayIndex, peakHour.id, 'endTime', e.target.value)
-                                  }
-                                  className="text-xs h-8"
-                                />
-                                <div className="flex gap-1">
+                            <div key={peakHour.id} className="flex items-center gap-2 p-3 bg-muted/50 rounded">
+                              <div className="flex-1 grid grid-cols-4 gap-3">
+                                <div className="flex flex-col">
+                                  <label className="text-xs text-muted-foreground mb-1">Start</label>
                                   <Input
-                                    type="number"
-                                    step="0.01"
-                                    min="1.0"
-                                    max="3.0"
-                                    value={peakHour.multiplier}
+                                    type="time"
+                                    value={peakHour.startTime}
                                     onChange={(e) => 
-                                      handlePeakHourChange(dayIndex, peakHour.id, 'multiplier', parseFloat(e.target.value) || 1.0)
+                                      handlePeakHourChange(dayIndex, peakHour.id, 'startTime', e.target.value)
                                     }
-                                    className="text-xs h-8 flex-1"
-                                    placeholder="1.15"
+                                    className="text-xs h-8"
+                                    title="Start Time"
                                   />
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => handleRemovePeakHour(dayIndex, peakHour.id)}
-                                    className="h-8 w-8 p-0"
-                                  >
-                                    <Trash2 className="h-3 w-3" />
-                                  </Button>
+                                </div>
+                                <div className="flex flex-col">
+                                  <label className="text-xs text-muted-foreground mb-1">End</label>
+                                  <Input
+                                    type="time"
+                                    value={peakHour.endTime}
+                                    onChange={(e) => 
+                                      handlePeakHourChange(dayIndex, peakHour.id, 'endTime', e.target.value)
+                                    }
+                                    className="text-xs h-8"
+                                    title="End Time"
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  <label className="text-xs text-muted-foreground mb-1">Increase %</label>
+                                  <div className="relative">
+                                    <Input
+                                      type="number"
+                                      step="1"
+                                      min="0"
+                                      max="200"
+                                      value={getPercentageFromMultiplier(peakHour.multiplier)}
+                                      onChange={(e) => 
+                                        handlePeakHourChange(dayIndex, peakHour.id, 'multiplier', e.target.value)
+                                      }
+                                      className="text-xs h-8 pr-8"
+                                      placeholder="15"
+                                      title="Price Increase %"
+                                    />
+                                    <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">%</span>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col">
+                                  <label className="text-xs text-muted-foreground mb-1">New Price</label>
+                                  <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1 px-2 py-1 bg-green-50 rounded border border-green-200 flex-1">
+                                      <span className="text-xs text-green-700">$</span>
+                                      <Input
+                                        type="text"
+                                        value={(productBasePrice * peakHour.multiplier).toFixed(2)}
+                                        onChange={(e) => handlePeakHourPriceChange(dayIndex, peakHour.id, e.target.value)}
+                                        className="text-xs text-green-700 bg-transparent border-none p-0 h-auto w-full focus:ring-0 focus:border-none"
+                                        style={{ color: '#15803d' }}
+                                      />
+                                    </div>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleRemovePeakHour(dayIndex, peakHour.id)}
+                                      className="h-8 w-8 p-0"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -279,20 +386,6 @@ export const ProductPeakHoursDialog = ({
             </div>
           </div>
 
-          {/* Current Price Reference */}
-          <div className="p-3 bg-muted/30 rounded-lg">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Current Base Price</span>
-              <span className="font-medium">${productBasePrice.toFixed(2)}</span>
-            </div>
-            <div className="flex items-center justify-between text-sm mt-1">
-              <span className="text-muted-foreground">Current Peak Price</span>
-              <span className="font-medium">${productPeakPrice.toFixed(2)}</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Set individual min/max prices for each day above
-            </p>
-          </div>
 
           {/* Summary */}
           <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">

@@ -344,6 +344,53 @@ export default function POSIntegration() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Product Reference Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Package className="w-5 h-5" />
+                  <span>Product Reference</span>
+                </CardTitle>
+                <CardDescription>
+                  Quick reference for product IDs when configuring pricing
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {[
+                    { id: "1", name: "Espresso" },
+                    { id: "2", name: "Cappuccino" },
+                    { id: "3", name: "Latte" },
+                    { id: "4", name: "Americano" },
+                    { id: "5", name: "Mocha" },
+                    { id: "6", name: "Macchiato" },
+                    { id: "7", name: "Frappuccino" },
+                    { id: "8", name: "Cold Brew" },
+                    { id: "9", name: "Green Tea Latte" },
+                    { id: "10", name: "Chai Latte" },
+                    { id: "11", name: "Iced Coffee" },
+                    { id: "12", name: "Hot Chocolate" },
+                    { id: "13", name: "Smoothie Bowl" }
+                  ].map((product) => (
+                    <div
+                      key={product.id}
+                      className="p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="font-mono text-sm font-bold text-primary">
+                        ID: {product.id}
+                      </div>
+                      <div className="text-xs text-muted-foreground truncate">
+                        {product.name}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-3">
+                  💡 Use these Product IDs when configuring individual product pricing
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="inventory" className="space-y-6 animate-in fade-in-0 slide-in-from-right-4 duration-300">
