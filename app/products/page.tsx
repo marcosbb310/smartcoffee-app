@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react";
-import { MainLayout } from "@/app/components/main-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
@@ -15,7 +14,9 @@ import {
   Settings,
   Zap,
   TrendingUp,
-  X
+  X,
+  ChevronRight,
+  CheckCircle
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/app/components/ui/dialog";
 import { Label } from "@/app/components/ui/label";
@@ -69,6 +70,7 @@ export default function Products() {
   
   // State for add product dialog
   const [isAddProductOpen, setIsAddProductOpen] = React.useState(false);
+  const [addProductRecipe, setAddProductRecipe] = React.useState<any[]>([]);
   
   // State for peak hours dialog
   const [peakHoursDialogOpen, setPeakHoursDialogOpen] = React.useState(false);
@@ -77,6 +79,7 @@ export default function Products() {
   // State for ingredients dialog
   const [ingredientsDialogOpen, setIngredientsDialogOpen] = React.useState(false);
   const [selectedProductForIngredients, setSelectedProductForIngredients] = React.useState<string | null>(null);
+  
   
   // State for global smart pricing
   const [globalSmartPricingDialogOpen, setGlobalSmartPricingDialogOpen] = React.useState(false);
@@ -523,11 +526,27 @@ export default function Products() {
     // Add the product to the state
     setProducts(prev => [...prev, product]);
     
+    // Save the recipe to sampleRecipes if ingredients were added
+    if (addProductRecipe.length > 0 && addProductRecipe.every(ing => ing.ingredientId && ing.quantity)) {
+      const recipeItems = addProductRecipe
+        .filter(ing => ing.ingredientId && ing.quantity)
+        .map(ing => ({
+          ingredientId: ing.ingredientId,
+          ingredientName: ing.ingredientName,
+          quantity: parseFloat(ing.quantity),
+          unit: ing.unit
+        }));
+      
+      // In a real app, you would save this to your backend/database
+      console.log('Recipe saved for product:', product.name, recipeItems);
+    }
+    
     // Reset form and close dialog
     setNewProduct({
       name: "",
       basePrice: ""
     });
+    setAddProductRecipe([]); // Reset recipe ingredients
     setIsAddProductOpen(false);
   };
 
@@ -536,6 +555,7 @@ export default function Products() {
       name: "",
       basePrice: ""
     });
+    setAddProductRecipe([]); // Reset recipe ingredients
   };
 
 
@@ -608,6 +628,41 @@ export default function Products() {
   };
 
 
+  // Functions for managing recipe ingredients in add product popup
+  const handleAddIngredientToProduct = () => {
+    const newIngredient = {
+      id: Date.now().toString(),
+      ingredientId: '',
+      ingredientName: '',
+      quantity: '',
+      unit: 'g'
+    };
+    setAddProductRecipe(prev => [...prev, newIngredient]);
+  };
+
+  const handleRemoveIngredientFromProduct = (ingredientId: string) => {
+    setAddProductRecipe(prev => prev.filter(ingredient => ingredient.id !== ingredientId));
+  };
+
+  const handleUpdateIngredientInProduct = (ingredientId: string, field: string, value: string) => {
+    setAddProductRecipe(prev => prev.map(ingredient => {
+      if (ingredient.id === ingredientId) {
+        if (field === 'ingredientId') {
+          const selectedIngredient = sampleIngredients.find(ing => ing.id === value);
+          return {
+            ...ingredient,
+            ingredientId: value,
+            ingredientName: selectedIngredient?.name || '',
+            unit: selectedIngredient?.unit || 'g'
+          };
+        }
+        return { ...ingredient, [field]: value };
+      }
+      return ingredient;
+    }));
+  };
+
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -624,8 +679,7 @@ export default function Products() {
   };
 
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -713,19 +767,109 @@ export default function Products() {
                   </div>
 
                   {/* Recipe Section */}
-                  <div className="space-y-4">
-                    <h4 className="text-sm font-medium text-black">Recipe</h4>
-                    <div className="p-4 border-2 border-dashed border-muted-foreground/25 rounded-lg text-center">
-                      <Package className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Define the ingredients and quantities needed for this product
-                      </p>
-                      <Button variant="outline" className="w-full">
-                        <Package className="w-4 h-4 mr-2" />
-                        Create Recipe
-                      </Button>
-                    </div>
-                  </div>
+             <div className="space-y-4">
+               <h4 className="text-sm font-medium text-black">Recipe Ingredients</h4>
+               <div className="space-y-4">
+                 <div className="flex items-center justify-between">
+                   <p className="text-sm text-muted-foreground">Add ingredients and quantities for this product</p>
+                   <Button
+                     type="button"
+                     variant="outline"
+                     size="sm"
+                     onClick={handleAddIngredientToProduct}
+                   >
+                     <Plus className="w-4 h-4 mr-2" />
+                     Add Ingredient
+                   </Button>
+                 </div>
+
+                 {addProductRecipe.length === 0 ? (
+                   <div className="text-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg">
+                     <Package className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
+                     <p className="text-sm text-muted-foreground mb-3">
+                       No ingredients added yet
+                     </p>
+                     <p className="text-xs text-muted-foreground">
+                       Click "Add Ingredient" to start building your recipe
+                     </p>
+                   </div>
+                 ) : (
+                   <div className="space-y-3">
+                     {addProductRecipe.map((ingredient) => (
+                       <div key={ingredient.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                         <div className="flex-1 grid grid-cols-4 gap-3">
+                           <div className="flex flex-col">
+                             <label className="text-xs text-muted-foreground mb-1">Ingredient</label>
+                             <Select
+                               value={ingredient.ingredientId}
+                               onValueChange={(value) => handleUpdateIngredientInProduct(ingredient.id, 'ingredientId', value)}
+                             >
+                               <SelectTrigger className="h-8">
+                                 <SelectValue placeholder="Select ingredient" />
+                               </SelectTrigger>
+                               <SelectContent>
+                                 {sampleIngredients.map((ing) => (
+                                   <SelectItem key={ing.id} value={ing.id}>
+                                     {ing.name}
+                                   </SelectItem>
+                                 ))}
+                               </SelectContent>
+                             </Select>
+                           </div>
+                           
+                           <div className="flex flex-col">
+                             <label className="text-xs text-muted-foreground mb-1">Quantity</label>
+                             <Input
+                               type="number"
+                               step="0.01"
+                               min="0"
+                               value={ingredient.quantity}
+                               onChange={(e) => handleUpdateIngredientInProduct(ingredient.id, 'quantity', e.target.value)}
+                               placeholder="0.00"
+                               className="h-8"
+                             />
+                           </div>
+                           
+                           <div className="flex flex-col">
+                             <label className="text-xs text-muted-foreground mb-1">Unit</label>
+                             <Select
+                               value={ingredient.unit}
+                               onValueChange={(value) => handleUpdateIngredientInProduct(ingredient.id, 'unit', value)}
+                             >
+                               <SelectTrigger className="h-8">
+                                 <SelectValue />
+                               </SelectTrigger>
+                               <SelectContent>
+                                 <SelectItem value="kg">kg</SelectItem>
+                                 <SelectItem value="g">g</SelectItem>
+                                 <SelectItem value="L">L</SelectItem>
+                                 <SelectItem value="ml">ml</SelectItem>
+                                 <SelectItem value="pieces">pieces</SelectItem>
+                                 <SelectItem value="cups">cups</SelectItem>
+                                 <SelectItem value="tbsp">tbsp</SelectItem>
+                                 <SelectItem value="tsp">tsp</SelectItem>
+                               </SelectContent>
+                             </Select>
+                           </div>
+                           
+                           <div className="flex items-end">
+                             <Button
+                               type="button"
+                               variant="outline"
+                               size="sm"
+                               onClick={() => handleRemoveIngredientFromProduct(ingredient.id)}
+                               className="h-8 w-8 p-0"
+                             >
+                               <X className="h-4 w-4" />
+                             </Button>
+                           </div>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                 )}
+               </div>
+             </div>
                 </div>
 
                 <DialogFooter className="gap-2">
@@ -747,45 +891,6 @@ export default function Products() {
           </div>
         </div>
 
-        {/* Smart Features Status */}
-        <div className="grid gap-4 md:grid-cols-3">
-          {/* Global Smart Pricing Status */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Settings className="h-5 w-5 text-black" />
-                  <div>
-                    <p className="font-medium text-black">
-                      {globalSmartPricingSettings.enabled ? "Global Smart Pricing Active" : "Global Smart Pricing Disabled"}
-                    </p>
-                    <p className="text-sm text-black">
-                      {globalSmartPricingSettings.enabled 
-                        ? `${globalSmartPricingSettings.priceParameters.pricingStrategy === 'multiplier' ? 'Multiplier' : 'Range'} approach: ${globalSmartPricingSettings.priceParameters.minPricePercentage}% - ${globalSmartPricingSettings.priceParameters.maxPricePercentage}%`
-                        : "Toggle above to enable global smart pricing for all products"
-                      }
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge className="text-black" style={{ backgroundColor: globalSmartPricingSettings.enabled ? '#e6eaf7' : '#f3f4f6' }}>
-                    {globalSmartPricingSettings.enabled ? "Active" : "Disabled"}
-                  </Badge>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setGlobalSmartPricingDialogOpen(true)}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-
-        </div>
 
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row gap-4">
@@ -975,7 +1080,8 @@ export default function Products() {
           recipe={selectedProductForIngredients ? sampleRecipes[selectedProductForIngredients] || [] : []}
         />
 
+
+
       </div>
-    </MainLayout>
   );
 }

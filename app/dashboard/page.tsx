@@ -1,6 +1,4 @@
 "use client"
-
-import { MainLayout } from "@/app/components/main-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
@@ -24,8 +22,7 @@ export default function Dashboard() {
   const posStatus = inventoryService.getPOSConnectionStatus();
   
   return (
-    <MainLayout>
-            <div className="space-y-6" style={{ background: '#ffffff', minHeight: '100vh', padding: '2rem' }}>
+    <div className="space-y-6" style={{ background: '#ffffff', minHeight: '100vh' }}>
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -231,6 +228,5 @@ export default function Dashboard() {
           </Card>
         )}
       </div>
-    </MainLayout>
   );
 }

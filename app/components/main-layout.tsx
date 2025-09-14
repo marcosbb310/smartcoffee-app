@@ -17,7 +17,8 @@ import {
   BarChart3, 
   FileText, 
   Globe,
-  ChevronDown
+  ChevronDown,
+  Palette
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -30,6 +31,14 @@ import {
 } from "@/app/components/ui/dropdown-menu";
 import { Badge } from "@/app/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
+import { ColorThemePicker } from "@/app/ThemeSelector";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/app/components/ui/dialog";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -186,6 +195,20 @@ export function MainLayout({ children }: MainLayoutProps) {
                     <Globe className="mr-2 h-4 w-4" />
                     <span>API Access</span>
                   </DropdownMenuItem>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                        <Palette className="mr-2 h-4 w-4" />
+                        <span>Colors</span>
+                      </DropdownMenuItem>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl">
+                      <DialogHeader>
+                        <DialogTitle>Customize Theme</DialogTitle>
+                      </DialogHeader>
+                      <ColorThemePicker />
+                    </DialogContent>
+                  </Dialog>
                 </DropdownMenuGroup>
                 
                 <DropdownMenuSeparator />
