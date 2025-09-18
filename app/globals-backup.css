@@ -1,0 +1,459 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius: 0.5rem;
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 222.2 84% 4.9%;
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 222.2 84% 4.9%;
+  --color-primary: 221.2 83.2% 53.3%;
+  --color-primary-foreground: 210 40% 98%;
+  --color-secondary: 210 40% 96%;
+  --color-secondary-foreground: 222.2 84% 4.9%;
+  --color-muted: 210 40% 96%;
+  --color-muted-foreground: 215.4 16.3% 46.9%;
+  --color-accent: 210 40% 96%;
+  --color-accent-foreground: 222.2 84% 4.9%;
+  --color-destructive: 0 84.2% 60.2%;
+  --color-destructive-foreground: 210 40% 98%;
+  --color-border: 214.3 31.8% 91.4%;
+  --color-input: 214.3 31.8% 91.4%;
+  --color-ring: 221.2 83.2% 53.3%;
+}
+
+@theme dark {
+  --color-background: 222.2 84% 4.9%;
+  --color-foreground: 210 40% 98%;
+  --color-card: 222.2 84% 4.9%;
+  --color-card-foreground: 210 40% 98%;
+  --color-popover: 222.2 84% 4.9%;
+  --color-popover-foreground: 210 40% 98%;
+  --color-primary: 217.2 91.2% 59.8%;
+  --color-primary-foreground: 222.2 84% 4.9%;
+  --color-secondary: 217.2 32.6% 17.5%;
+  --color-secondary-foreground: 210 40% 98%;
+  --color-muted: 217.2 32.6% 17.5%;
+  --color-muted-foreground: 215 20.2% 65.1%;
+  --color-accent: 217.2 32.6% 17.5%;
+  --color-accent-foreground: 210 40% 98%;
+  --color-destructive: 0 62.8% 30.6%;
+  --color-destructive-foreground: 210 40% 98%;
+  --color-border: 217.2 32.6% 17.5%;
+  --color-input: 217.2 32.6% 17.5%;
+  --color-ring: 224.3 76.3% 94.1%;
+}
+
+* {
+  border-color: hsl(var(--color-border));
+}
+
+body {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Smart Coffee Brand Colors */
+:root {
+  /* Primary Coffee Brand Colors */
+  --coffee-primary: 25 15% 15%;        /* Dark brown coffee */
+  --coffee-secondary: 30 20% 25%;      /* Medium brown */
+  --coffee-accent: 35 25% 35%;         /* Light brown */
+  --coffee-light: 40 30% 85%;          /* Cream/beige */
+  
+  /* Coffee Shop Atmosphere */
+  --warm-gold: 45 80% 60%;             /* Warm gold */
+  --rich-amber: 35 70% 55%;            /* Rich amber */
+  --soft-cream: 50 40% 95%;            /* Soft cream */
+  --deep-charcoal: 210 15% 20%;        /* Deep charcoal */
+  
+  /* Status Colors */
+  --success-green: 120 50% 45%;        /* Success green */
+  --warning-orange: 30 80% 60%;        /* Warning orange */
+  --error-red: 0 70% 55%;              /* Error red */
+  --info-blue: 210 70% 55%;            /* Info blue */
+  
+  /* Smart Features */
+  --smart-purple: 260 60% 55%;         /* Smart purple */
+  --ai-blue: 200 80% 60%;              /* AI blue */
+  --data-green: 140 60% 50%;           /* Data green */
+  --analytics-orange: 25 85% 60%;      /* Analytics orange */
+}
+
+.dark {
+  --coffee-primary: 25 20% 25%;
+  --coffee-secondary: 30 25% 35%;
+  --coffee-accent: 35 30% 45%;
+  --coffee-light: 40 25% 15%;
+  
+  --warm-gold: 45 70% 50%;
+  --rich-amber: 35 60% 45%;
+  --soft-cream: 50 30% 10%;
+  --deep-charcoal: 210 20% 85%;
+  
+  --success-green: 120 40% 35%;
+  --warning-orange: 30 70% 50%;
+  --error-red: 0 60% 45%;
+  --info-blue: 210 60% 45%;
+  
+  --smart-purple: 260 50% 45%;
+  --ai-blue: 200 70% 50%;
+  --data-green: 140 50% 40%;
+  --analytics-orange: 25 75% 50%;
+}
+
+/* Coffee-themed utility classes */
+.bg-coffee-primary { background-color: hsl(var(--coffee-primary)); }
+.bg-coffee-secondary { background-color: hsl(var(--coffee-secondary)); }
+.bg-coffee-accent { background-color: hsl(var(--coffee-accent)); }
+.bg-coffee-light { background-color: hsl(var(--coffee-light)); }
+
+.text-coffee-primary { color: hsl(var(--coffee-primary)); }
+.text-coffee-secondary { color: hsl(var(--coffee-secondary)); }
+.text-coffee-accent { color: hsl(var(--coffee-accent)); }
+.text-coffee-light { color: hsl(var(--coffee-light)); }
+
+.border-coffee-primary { border-color: hsl(var(--coffee-primary)); }
+.border-coffee-secondary { border-color: hsl(var(--coffee-secondary)); }
+.border-coffee-accent { border-color: hsl(var(--coffee-accent)); }
+
+/* Warm atmosphere colors */
+.bg-warm-gold { background-color: hsl(var(--warm-gold)); }
+.bg-rich-amber { background-color: hsl(var(--rich-amber)); }
+.bg-soft-cream { background-color: hsl(var(--soft-cream)); }
+.bg-deep-charcoal { background-color: hsl(var(--deep-charcoal)); }
+
+.text-warm-gold { color: hsl(var(--warm-gold)); }
+.text-rich-amber { color: hsl(var(--rich-amber)); }
+.text-soft-cream { color: hsl(var(--soft-cream)); }
+.text-deep-charcoal { color: hsl(var(--deep-charcoal)); }
+
+/* Smart feature colors */
+.bg-smart-purple { background-color: hsl(var(--smart-purple)); }
+.bg-ai-blue { background-color: hsl(var(--ai-blue)); }
+.bg-data-green { background-color: hsl(var(--data-green)); }
+.bg-analytics-orange { background-color: hsl(var(--analytics-orange)); }
+
+.text-smart-purple { color: hsl(var(--smart-purple)); }
+.text-ai-blue { color: hsl(var(--ai-blue)); }
+.text-data-green { color: hsl(var(--data-green)); }
+.text-analytics-orange { color: hsl(var(--analytics-orange)); }
+
+/* Status colors */
+.bg-success-green { background-color: hsl(var(--success-green)); }
+.bg-warning-orange { background-color: hsl(var(--warning-orange)); }
+.bg-error-red { background-color: hsl(var(--error-red)); }
+.bg-info-blue { background-color: hsl(var(--info-blue)); }
+
+.text-success-green { color: hsl(var(--success-green)); }
+.text-warning-orange { color: hsl(var(--warning-orange)); }
+.text-error-red { color: hsl(var(--error-red)); }
+.text-info-blue { color: hsl(var(--info-blue)); }
+
+/* Coffee shop specific components */
+.coffee-card {
+  @apply bg-coffee-light border-coffee-accent rounded-lg shadow-sm;
+}
+
+.coffee-button-primary {
+  @apply bg-coffee-primary text-coffee-light hover:bg-coffee-secondary;
+}
+
+.coffee-button-secondary {
+  @apply bg-coffee-accent text-coffee-primary hover:bg-coffee-secondary hover:text-coffee-light;
+}
+
+.coffee-nav {
+  @apply bg-coffee-primary text-coffee-light;
+}
+
+.coffee-sidebar {
+  @apply bg-coffee-secondary text-coffee-light;
+}
+
+/* Smart features styling */
+.smart-pricing-card {
+  @apply bg-smart-purple/10 border-smart-purple/20 text-smart-purple;
+}
+
+.ai-inventory-card {
+  @apply bg-ai-blue/10 border-ai-blue/20 text-ai-blue;
+}
+
+.data-analytics-card {
+  @apply bg-data-green/10 border-data-green/20 text-data-green;
+}
+
+.analytics-dashboard-card {
+  @apply bg-analytics-orange/10 border-analytics-orange/20 text-analytics-orange;
+}
+
+/* Peak hours styling */
+.peak-hour-active {
+  @apply bg-warning-orange/20 border-warning-orange text-warning-orange;
+}
+
+.peak-hour-inactive {
+  @apply bg-coffee-light border-coffee-accent text-coffee-secondary;
+}
+
+/* Inventory status colors */
+.inventory-critical {
+  @apply bg-error-red/20 border-error-red text-error-red;
+}
+
+.inventory-low {
+  @apply bg-warning-orange/20 border-warning-orange text-warning-orange;
+}
+
+.inventory-good {
+  @apply bg-success-green/20 border-success-green text-success-green;
+}
+
+.inventory-excellent {
+  @apply bg-data-green/20 border-data-green text-data-green;
+}
+
+/* POS specific styling */
+.pos-screen {
+  @apply bg-deep-charcoal text-soft-cream;
+}
+
+.pos-button {
+  @apply bg-coffee-primary text-coffee-light hover:bg-coffee-secondary;
+}
+
+.pos-display {
+  @apply bg-soft-cream text-deep-charcoal border-coffee-accent;
+}
+
+/* Responsive coffee shop layout */
+.coffee-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.coffee-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.coffee-section {
+  @apply py-8 lg:py-12;
+}
+
+/* Animation for coffee shop feel */
+@keyframes coffee-steam {
+  0% { opacity: 0; transform: translateY(0) scale(1); }
+  50% { opacity: 1; transform: translateY(-10px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-20px) scale(1.2); }
+}
+
+.coffee-steam {
+  animation: coffee-steam 2s ease-in-out infinite;
+}
+
+/* Warm glow effect */
+.warm-glow {
+  box-shadow: 0 0 20px hsl(var(--warm-gold) / 0.3);
+}
+
+.coffee-glow {
+  box-shadow: 0 0 15px hsl(var(--coffee-primary) / 0.2);
+}
+
+/* Custom scrollbar for coffee theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--coffee-light));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--coffee-accent));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--coffee-secondary));
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: hsl(var(--coffee-primary));
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--coffee-secondary));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--coffee-accent));
+}
+
+/* Coffee shop typography */
+.coffee-heading {
+  @apply font-bold text-coffee-primary;
+}
+
+.coffee-subheading {
+  @apply font-semibold text-coffee-secondary;
+}
+
+.coffee-body {
+  @apply text-coffee-accent;
+}
+
+.coffee-caption {
+  @apply text-sm text-coffee-secondary;
+}
+
+/* Smart coffee specific components */
+.smart-coffee-header {
+  @apply bg-gradient-to-r from-coffee-primary to-coffee-secondary text-coffee-light;
+}
+
+.smart-feature-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.smart-feature-badge.pricing {
+  @apply bg-smart-purple/20 text-smart-purple;
+}
+
+.smart-feature-badge.inventory {
+  @apply bg-ai-blue/20 text-ai-blue;
+}
+
+.smart-feature-badge.analytics {
+  @apply bg-data-green/20 text-data-green;
+}
+
+/* Coffee shop layout helpers */
+.coffee-sidebar-width {
+  width: 280px;
+}
+
+.coffee-main-content {
+  margin-left: 280px;
+}
+
+@media (max-width: 768px) {
+  .coffee-main-content {
+    margin-left: 0;
+  }
+  
+  .coffee-sidebar-width {
+    width: 100%;
+  }
+}
+
+/* Coffee shop loading states */
+.coffee-loading {
+  @apply animate-pulse bg-coffee-light;
+}
+
+.coffee-skeleton {
+  @apply bg-coffee-light rounded animate-pulse;
+}
+
+/* Coffee shop focus states */
+.coffee-focus {
+  @apply focus:outline-none focus:ring-2 focus:ring-coffee-primary focus:ring-offset-2;
+}
+
+/* Coffee shop hover effects */
+.coffee-hover {
+  @apply transition-all duration-200 hover:shadow-lg hover:scale-105;
+}
+
+.coffee-hover-subtle {
+  @apply transition-all duration-200 hover:shadow-md;
+}
+
+/* Print styles for coffee shop */
+@media print {
+  .coffee-print-hide {
+    display: none !important;
+  }
+  
+  .coffee-print-show {
+    display: block !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

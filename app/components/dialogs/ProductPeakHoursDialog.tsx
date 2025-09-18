@@ -213,15 +213,15 @@ export const ProductPeakHoursDialog = ({
 
         <div className="space-y-4">
           {/* Product Base Price */}
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="p-4 bg-[#e6eaf7] rounded-lg border border-[#d1d9f0]">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-sm font-medium text-blue-900">Product Base Price</h4>
-                <p className="text-xs text-blue-700">Current base price for {productName}</p>
+                <h4 className="text-sm font-medium text-[#2c4170]">Product Base Price</h4>
+                <p className="text-xs text-[#2c4170]">Current base price for {productName}</p>
               </div>
               <div className="text-right">
-                <span className="text-2xl font-bold text-blue-900">${productBasePrice.toFixed(2)}</span>
-                <p className="text-xs text-blue-700">Base Price</p>
+                <span className="text-2xl font-bold text-[#2c4170]">${productBasePrice.toFixed(2)}</span>
+                <p className="text-xs text-[#2c4170]">Base Price</p>
               </div>
             </div>
           </div>

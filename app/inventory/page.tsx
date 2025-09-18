@@ -26,29 +26,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/ta
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { sampleIngredients, sampleRecipes, SmartInventorySettings, RecipeItem } from "@/lib/types/inventory";
 import { inventoryService } from "@/lib/services/inventory";
-import { SmartInventoryDialog } from "@/app/components/smart-inventory-dialog";
+import { SmartInventoryDialog } from "@/app/components/dialogs/SmartInventoryDialog";
 import { Switch } from "@/app/components/ui/switch";
 import React, { useState, useEffect } from "react";
+import { convertRecipesToArray } from "@/shared/utils/data-transform";
 
 export default function InventoryManagement() {
   const [inventoryStatus, setInventoryStatus] = useState(inventoryService.getInventoryStatus());
   const [reorderSuggestions, setReorderSuggestions] = useState(inventoryService.getReorderSuggestions());
   const [ingredients, setIngredients] = useState(sampleIngredients);
-  // Convert sampleRecipes object to array format
-  const convertRecipesToArray = (recipesObj: { [productId: string]: any[] }) => {
-    const recipeArray: Array<any & { productId: string; id: string; isOptional?: boolean }> = [];
-    Object.entries(recipesObj).forEach(([productId, recipeItems]) => {
-      recipeItems.forEach((item, index) => {
-        recipeArray.push({
-          ...item,
-          productId,
-          id: `${productId}-${item.ingredientId}-${index}`,
-          isOptional: false
-        });
-      });
-    });
-    return recipeArray;
-  };
+  // convertRecipesToArray function now imported from shared utils
 
   const [recipes, setRecipes] = useState(convertRecipesToArray(sampleRecipes));
   
@@ -170,13 +157,13 @@ export default function InventoryManagement() {
     }
     
     const ingredient = {
-      id: Math.max(...ingredients.map(i => i.id)) + 1,
+      id: Math.max(...ingredients.map(i => parseInt(i.id))) + 1,
       name: newIngredient.name.trim(),
       category: newIngredient.category,
       unit: newIngredient.unit,
       currentStock: currentStock,
-      minStock: minStock,
-      maxStock: maxStock,
+      minStockLevel: minStock,
+      maxStockLevel: maxStock,
       costPerUnit: costPerUnit,
       supplier: newIngredient.supplier.trim(),
       status: newIngredient.status,
@@ -817,7 +804,7 @@ export default function InventoryManagement() {
             <div className="space-y-4">
               {ingredients.map((ingredient) => {
                 const stockStatus = getStockStatus(ingredient);
-                const stockPercentage = (ingredient.currentStock / ingredient.maxStock) * 100;
+                const stockPercentage = (ingredient.currentStock / ingredient.maxStockLevel) * 100;
                 
                 return (
                   <div key={ingredient.id} className="flex items-center justify-between p-4 border rounded-lg">
@@ -1754,9 +1741,9 @@ export default function InventoryManagement() {
                           No problem! We'll guide you through adding your ingredients and recipes step by step
                         </p>
                       </div>
-                      <div className="p-6 bg-blue-50 rounded-lg text-center">
-                        <h4 className="font-medium text-blue-900 mb-2">Ready to get started?</h4>
-                        <p className="text-sm text-blue-800 mb-4">
+                      <div className="p-6 bg-[#e6eaf7] rounded-lg text-center">
+                        <h4 className="font-medium text-[#2c4170] mb-2">Ready to get started?</h4>
+                        <p className="text-sm text-[#2c4170] mb-4">
                           We'll help you add your most popular items first, then you can add more over time.
                         </p>
                         <div className="flex gap-2 justify-center">

@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#f7f3f0] to-[#ede7e0]">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center space-y-8">
           {/* Hero Section */}
@@ -29,7 +29,7 @@ export default function Home() {
             
             <h1 className="text-6xl font-bold tracking-tight">
               Napoleon
-              <span className="block text-4xl text-blue-600 mt-2">
+              <span className="block text-4xl text-[#2c4170] mt-2">
                 Business Intelligence
               </span>
             </h1>
@@ -61,8 +61,8 @@ export default function Home() {
             {/* Smart Pricing */}
             <Card className="text-left">
               <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Zap className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-[#e6eaf7] rounded-lg flex items-center justify-center mb-4">
+                  <Zap className="w-6 h-6 text-[#2c4170]" />
                 </div>
                 <CardTitle className="text-2xl">Smart Pricing</CardTitle>
                 <CardDescription className="text-base">
@@ -72,7 +72,7 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
-                    <Clock className="w-5 h-5 text-blue-600" />
+                    <Clock className="w-5 h-5 text-[#2c4170]" />
                     <div>
                       <p className="font-medium">Peak Hour Pricing</p>
                       <p className="text-sm text-muted-foreground">
@@ -81,7 +81,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <TrendingUp className="w-5 h-5 text-blue-600" />
+                    <TrendingUp className="w-5 h-5 text-[#2c4170]" />
                     <div>
                       <p className="font-medium">Waste Prevention</p>
                       <p className="text-sm text-muted-foreground">
@@ -93,7 +93,7 @@ export default function Home() {
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Revenue Impact</span>
-                    <Badge className="bg-blue-100 text-blue-800">+23%</Badge>
+                    <Badge className="bg-[#e6eaf7] text-[#2c4170]">+23%</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -102,8 +102,8 @@ export default function Home() {
             {/* Inventory Management */}
             <Card className="text-left">
               <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Package className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-[#e6eaf7] rounded-lg flex items-center justify-center mb-4">
+                  <Package className="w-6 h-6 text-[#2c4170]" />
                 </div>
                 <CardTitle className="text-2xl">Inventory Management</CardTitle>
                 <CardDescription className="text-base">
@@ -113,7 +113,7 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
-                    <BarChart3 className="w-5 h-5 text-blue-600" />
+                    <BarChart3 className="w-5 h-5 text-[#2c4170]" />
                     <div>
                       <p className="font-medium">Auto Tracking</p>
                       <p className="text-sm text-muted-foreground">
@@ -122,7 +122,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <ShoppingCart className="w-5 h-5 text-blue-600" />
+                    <ShoppingCart className="w-5 h-5 text-[#2c4170]" />
                     <div>
                       <p className="font-medium">Smart Reordering</p>
                       <p className="text-sm text-muted-foreground">
@@ -134,7 +134,7 @@ export default function Home() {
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Waste Reduction</span>
-                    <Badge className="bg-blue-100 text-blue-800">-15%</Badge>
+                    <Badge className="bg-[#e6eaf7] text-[#2c4170]">-15%</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -146,8 +146,8 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-8">How It Works</h2>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl font-bold text-blue-600">1</span>
+                <div className="w-16 h-16 bg-[#e6eaf7] rounded-full flex items-center justify-center mx-auto">
+                  <span className="text-2xl font-bold text-[#2c4170]">1</span>
                 </div>
                 <h3 className="text-xl font-semibold">Set Up Products</h3>
                 <p className="text-muted-foreground">
@@ -155,8 +155,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl font-bold text-blue-600">2</span>
+                <div className="w-16 h-16 bg-[#e6eaf7] rounded-full flex items-center justify-center mx-auto">
+                  <span className="text-2xl font-bold text-[#2c4170]">2</span>
                 </div>
                 <h3 className="text-xl font-semibold">Track Sales</h3>
                 <p className="text-muted-foreground">
@@ -164,8 +164,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl font-bold text-blue-600">3</span>
+                <div className="w-16 h-16 bg-[#e6eaf7] rounded-full flex items-center justify-center mx-auto">
+                  <span className="text-2xl font-bold text-[#2c4170]">3</span>
                 </div>
                 <h3 className="text-xl font-semibold">Smart Actions</h3>
                 <p className="text-muted-foreground">
@@ -181,29 +181,29 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <CheckCircle className="w-5 h-5 text-[#2c4170]" />
                   <span className="font-medium">Never run out of inventory</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <CheckCircle className="w-5 h-5 text-[#2c4170]" />
                   <span className="font-medium">Maximize revenue during peak hours</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <CheckCircle className="w-5 h-5 text-[#2c4170]" />
                   <span className="font-medium">Reduce waste with smart pricing</span>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <CheckCircle className="w-5 h-5 text-[#2c4170]" />
                   <span className="font-medium">Automated inventory tracking</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <CheckCircle className="w-5 h-5 text-[#2c4170]" />
                   <span className="font-medium">Simple, easy-to-use interface</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <CheckCircle className="w-5 h-5 text-[#2c4170]" />
                   <span className="font-medium">Real-time insights and alerts</span>
                 </div>
               </div>

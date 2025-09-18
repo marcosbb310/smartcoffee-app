@@ -4,16 +4,22 @@
 
 ### Three Main Colors:
 
-1. **Light Brown Gradient** (Card Backgrounds)
+1. **Perfect Card Gradient** (Card Backgrounds) ✅ CONFIRMED BY USER
+   - Start: `#ffffff` (pure white)
+   - End: `#e2e8f0` (light grey)
+   - Usage: All card backgrounds, product cards, dashboard cards
+   - CSS: `linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)`
+
+2. **Warm Beige Gradient** (Page Backgrounds)
    - Start: `#f7f3f0` (very light warm beige)
    - End: `#ede7e0` (slightly darker warm beige)
-   - Usage: All card backgrounds, main dashboard background
+   - Usage: Main page backgrounds, dashboard backgrounds
 
-2. **Light Napoleon Blue** (Stat Cards, Badges, Progress Bar Backgrounds)
+3. **Light Napoleon Blue** (Stat Cards, Badges, Progress Bar Backgrounds)
    - Color: `#e6eaf7` (Light Napoleon Blue)
    - Usage: Small stat cards, badges, unfilled progress bar backgrounds
 
-3. **Napoleon Blue** (Primary Elements, Icons, Progress Bar Fills)
+4. **Napoleon Blue** (Primary Elements, Icons, Progress Bar Fills)
    - Color: `#2c4170` (Napoleon Blue)
    - Usage: Revenue card icons, revenue badges, filled progress bars
 

@@ -9,8 +9,9 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { PeakHourSettingsDialog } from "@/app/components/peak-hour-settings-dialog";
+import { PeakHourSettingsDialog } from "@/app/components/dialogs/PeakHourSettingsDialog";
 import { PeakHourSettings, DAYS_OF_WEEK } from "@/lib/types/peak-hours";
+import { initializePOSPeakHourSettings } from "@/shared/utils/peak-hours";
 import { 
   Link2, 
   CheckCircle, 
@@ -30,36 +31,7 @@ import {
 
 export default function POSIntegration() {
   const [peakHourDialogOpen, setPeakHourDialogOpen] = useState(false);
-  const [peakHourSettings, setPeakHourSettings] = useState<PeakHourSettings>({
-    days: DAYS_OF_WEEK.map((day, index) => ({
-      day,
-      enabled: index < 5, // Enable Monday-Friday by default
-      peakHours: index < 5 ? [
-        {
-          id: `morning-${day.toLowerCase()}`,
-          startTime: "07:00",
-          endTime: "09:00",
-          multiplier: 1.15,
-          label: "Morning Rush"
-        },
-        {
-          id: `lunch-${day.toLowerCase()}`,
-          startTime: "12:00",
-          endTime: "14:00",
-          multiplier: 1.20,
-          label: "Lunch Rush"
-        },
-        {
-          id: `evening-${day.toLowerCase()}`,
-          startTime: "17:00",
-          endTime: "19:00",
-          multiplier: 1.25,
-          label: "Evening Rush"
-        }
-      ] : []
-    })),
-    globalMultiplier: 1.15
-  });
+  const [peakHourSettings, setPeakHourSettings] = useState<PeakHourSettings>(initializePOSPeakHourSettings());
 
   const handleSavePeakHourSettings = (settings: PeakHourSettings) => {
     setPeakHourSettings(settings);
@@ -257,7 +229,7 @@ export default function POSIntegration() {
                         console.log('Opening peak hour dialog');
                         setPeakHourDialogOpen(true);
                       }}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      className="bg-[#2c4170] hover:bg-[#1e2f4a] text-white"
                     >
                       <Edit3 className="h-4 w-4 mr-2" />
                       Configure Peak Hours

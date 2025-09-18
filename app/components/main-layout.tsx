@@ -70,7 +70,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                 <div className="max-h-64 overflow-y-auto">
                   <DropdownMenuItem className="flex flex-col items-start p-3">
                     <div className="flex items-start space-x-2 w-full">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-[#2c4170] rounded-full mt-2 flex-shrink-0"></div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium">Low Stock Alert</p>
                         <p className="text-xs text-muted-foreground">Coffee beans are running low (15% remaining)</p>

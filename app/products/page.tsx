@@ -25,39 +25,16 @@ import { Checkbox } from "@/app/components/ui/checkbox";
 import { inventoryService } from "@/lib/services/inventory";
 import { PeakHour, DayPeakHours, PeakHourSettings, DAYS_OF_WEEK } from "@/lib/types/peak-hours";
 import { sampleIngredients, sampleRecipes } from "@/lib/types/inventory";
-import { ProductPeakHoursDialog } from "@/app/components/product-peak-hours-dialog";
-import { GlobalSmartPricingDialog } from "@/app/components/global-smart-pricing-dialog";
-import { ProductIngredientsDialog } from "@/app/components/product-ingredients-dialog";
+import { ProductPeakHoursDialog } from "@/app/components/dialogs/ProductPeakHoursDialog";
+import { GlobalSmartPricingDialog } from "@/app/components/dialogs/GlobalSmartPricingDialog";
+import { ProductIngredientsDialog } from "@/app/components/dialogs/ProductIngredientsDialog";
+import { isPeakHour, getDefaultPeakHourSettings, initializePeakHourSettings } from "@/shared/utils/peak-hours";
 
 export default function Products() {
   // State for peak hour settings - now using the new structure
   const [peakHourSettings, setPeakHourSettings] = React.useState<{[key: string]: PeakHourSettings}>({
     // Sample data for demonstration
-    "1": {
-      days: DAYS_OF_WEEK.map((day, index) => ({
-        day,
-        enabled: index < 5, // Monday-Friday enabled
-        peakHours: index < 5 ? [
-          {
-            id: `morning-${day.toLowerCase()}`,
-            startTime: "07:00",
-            endTime: "09:00",
-            multiplier: 1.15,
-            label: "Morning Rush"
-          },
-          {
-            id: `lunch-${day.toLowerCase()}`,
-            startTime: "12:00",
-            endTime: "14:00",
-            multiplier: 1.20,
-            label: "Lunch Rush"
-          }
-        ] : [],
-        minPrice: index < 5 ? (index === 0 ? 1.50 : 1.25) : undefined, // Monday higher min, others lower
-        maxPrice: index < 5 ? (index === 4 ? 5.00 : 4.50) : undefined // Friday higher max, others lower
-      })),
-      globalMultiplier: 1.15
-    }
+    "1": initializePeakHourSettings()
   });
 
   // State for search
@@ -570,14 +547,7 @@ export default function Products() {
   };
 
   // Helper function to get default peak hour settings for a product
-  const getDefaultPeakHourSettings = (): PeakHourSettings => ({
-    days: DAYS_OF_WEEK.map(day => ({
-      day,
-      enabled: false,
-      peakHours: []
-    })),
-    globalMultiplier: 1.15
-  });
+  // Now using shared function
 
   // Handle opening peak hours dialog
   const handleOpenPeakHoursDialog = (productId: string) => {
@@ -618,10 +588,7 @@ export default function Products() {
     }
   };
 
-  const isPeakHour = () => {
-    const hour = new Date().getHours();
-    return hour >= 7 && hour <= 9 || hour >= 12 && hour <= 14 || hour >= 17 && hour <= 19;
-  };
+  // isPeakHour function now imported from shared utils
 
   return (
     <MainLayout>

@@ -45,64 +45,35 @@
 
 :root {
   --radius: 0.75rem;
-  /* BACKUP: Original coffee-shop inspired color palette - UNCOMMENT TO RESTORE */
-  /* --background: oklch(0.99 0.005 30); /* Warm white */
-  /* --foreground: oklch(0.15 0.02 30); /* Warm dark brown */
-  /* --card: oklch(1 0 0); /* Pure white */
-  /* --card-foreground: oklch(0.15 0.02 30); */
-  /* --popover: oklch(1 0 0); */
-  /* --popover-foreground: oklch(0.15 0.02 30); */
-  /* --primary: oklch(0.35 0.08 30); /* Rich coffee brown */
-  /* --primary-foreground: oklch(0.98 0.01 30); */
-  /* --secondary: oklch(0.95 0.02 30); /* Light warm gray */
-  /* --secondary-foreground: oklch(0.25 0.02 30); */
-  /* --muted: oklch(0.96 0.01 30); /* Very light warm gray */
-  /* --muted-foreground: oklch(0.45 0.02 30); */
-  /* --accent: oklch(0.85 0.05 30); /* Light coffee cream */
-  /* --accent-foreground: oklch(0.25 0.02 30); */
-  /* --destructive: oklch(0.55 0.15 15); /* Warm red */
-  /* --border: oklch(0.90 0.01 30); /* Light warm border */
-  /* --input: oklch(0.95 0.01 30); */
-  /* --ring: oklch(0.35 0.08 30); */
-  /* --chart-1: oklch(0.35 0.08 30); /* Coffee brown */
-  /* --chart-2: oklch(0.60 0.12 60); /* Golden brown */
-  /* --chart-3: oklch(0.45 0.10 15); /* Warm red-brown */
-  /* --chart-4: oklch(0.70 0.15 90); /* Sage green */
-  /* --chart-5: oklch(0.50 0.08 45); /* Muted orange */
-  /* --sidebar: oklch(0.98 0.01 30); */
-  /* --sidebar-foreground: oklch(0.20 0.02 30); */
-  /* --sidebar-primary: oklch(0.35 0.08 30); */
-  /* --sidebar-primary-foreground: oklch(0.98 0.01 30); */
-  /* --sidebar-accent: oklch(0.95 0.02 30); */
-  /* --sidebar-accent-foreground: oklch(0.25 0.02 30); */
-  /* --sidebar-border: oklch(0.90 0.01 30); */
-  /* --sidebar-ring: oklch(0.35 0.08 30); */
   
-  /* TEST: Dashboard color scheme applied globally */
-  --background: oklch(0.99 0.005 0); /* Clean white */
-  --foreground: oklch(0.15 0.01 0); /* Dark gray */
-  --card: oklch(0.98 0.01 0); /* Light brown gradient start */
+  /* Napoleon Blue Theme */
+  --background: oklch(0.99 0.005 0);
+  --foreground: oklch(0.15 0.01 0);
+  --card: oklch(0.98 0.01 0);
   --card-foreground: oklch(0.15 0.01 0);
   --popover: oklch(0.98 0.01 0);
   --popover-foreground: oklch(0.15 0.01 0);
-  --primary: oklch(0.45 0.15 250); /* Napoleon Blue */
+  --primary: oklch(0.45 0.15 250);
   --primary-foreground: oklch(0.98 0.01 0);
-  --secondary: oklch(0.90 0.05 250); /* Light Napoleon Blue */
+  --secondary: oklch(0.90 0.05 250);
   --secondary-foreground: oklch(0.25 0.01 0);
-  --muted: oklch(0.92 0.05 250); /* Very light blue */
+  --muted: oklch(0.92 0.05 250);
   --muted-foreground: oklch(0.45 0.01 0);
-  --accent: oklch(0.90 0.05 250); /* Light blue accent */
+  --accent: oklch(0.90 0.05 250);
   --accent-foreground: oklch(0.25 0.01 0);
-  --destructive: oklch(0.55 0.15 15); /* Keep red for destructive actions */
-  --border: oklch(0.90 0.01 0); /* Light gray border */
+  --destructive: oklch(0.55 0.15 15);
+  --border: oklch(0.90 0.01 0);
   --input: oklch(0.95 0.01 0);
   --ring: oklch(0.45 0.15 250);
-  /* Chart colors - Napoleon Blue palette */
-  --chart-1: oklch(0.45 0.15 250); /* Napoleon Blue */
-  --chart-2: oklch(0.90 0.05 250); /* Light Napoleon Blue */
-  --chart-3: oklch(0.45 0.10 15); /* Warm red-brown */
-  --chart-4: oklch(0.70 0.15 90); /* Sage green */
-  --chart-5: oklch(0.50 0.08 45); /* Muted orange */
+  
+  /* Chart colors */
+  --chart-1: oklch(0.45 0.15 250);
+  --chart-2: oklch(0.90 0.05 250);
+  --chart-3: oklch(0.45 0.10 15);
+  --chart-4: oklch(0.70 0.15 90);
+  --chart-5: oklch(0.50 0.08 45);
+  
+  /* Sidebar colors */
   --sidebar: oklch(0.98 0.01 0);
   --sidebar-foreground: oklch(0.20 0.01 0);
   --sidebar-primary: oklch(0.45 0.15 250);
@@ -111,40 +82,6 @@
   --sidebar-accent-foreground: oklch(0.25 0.01 0);
   --sidebar-border: oklch(0.90 0.01 0);
   --sidebar-ring: oklch(0.45 0.15 250);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
@@ -168,22 +105,15 @@
   }
 }
 
-/* SmartPricing Application Styles */
 @layer components {
-  /* Ensure full width content */
+  /* Layout */
   .main-content {
     width: 100%;
   }
-
-  /* Full width grids and cards */
   .main-content .grid,
   .main-content .flex,
   .main-content .space-y-6,
-  .main-content .space-y-4 {
-    width: 100%;
-  }
-
-  /* Full width cards and charts */
+  .main-content .space-y-4,
   .main-content [data-slot="card"],
   .main-content .card,
   .main-content [data-slot="chart"],
@@ -191,178 +121,77 @@
     width: 100%;
   }
 
-  /* TEST: Dashboard color scheme applied globally */
-  
-  /* NAPOLEON BLUE THEME (ACTIVE) */
+  /* Perfect Card Gradient */
   .card,
   [data-slot="card"],
-  .bg-card {
+  .bg-card,
+  .bg-white,
+  .bg-gray-50,
+  .bg-gray-100,
+  .bg-slate-50,
+  .bg-slate-100 {
     background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%) !important;
   }
+
+  /* Page Backgrounds */
+  .main-content,
+  .dashboard,
+  .products-page,
+  .inventory-page,
+  .pos-page {
+    background: linear-gradient(135deg, #f7f3f0 0%, #ede7e0 100%) !important;
+  }
+
+  /* Badge Styling */
   .badge,
   [data-slot="badge"],
   .bg-secondary {
     background-color: #e6eaf7 !important;
     color: #000000 !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.025em !important;
+    transition: all 0.2s ease-in-out !important;
   }
+  
+  .badge:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  }
+
   .bg-muted,
   .bg-accent {
     background-color: #e6eaf7 !important;
   }
+
   .bg-primary,
   [data-slot="primary"] {
     background-color: #2c4170 !important;
     color: #ffffff !important;
   }
 
-  /* AMBER THEME (COMMENTED OUT) */
-  /*
-  .card,
-  [data-slot="card"],
-  .bg-card {
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%) !important;
-  }
-
-  .badge,
-  [data-slot="badge"],
-  .bg-secondary {
-    background-color: #fef3c7 !important;
-    color: #000000 !important;
-  }
-
-  .bg-muted,
-  .bg-accent {
-    background-color: #fef3c7 !important;
-  }
-  */
-
-  /* AMBER THEME OVERRIDES (COMMENTED OUT - CONFLICTING WITH NAPOLEON BLUE) */
-  /*
-  .bg-primary,
-  [data-slot="primary"],
-  .bg-primary-foreground,
-  .text-primary,
-  .text-primary-foreground,
-  button[class*="bg-primary"],
-  [class*="bg-primary"],
-  button.bg-primary,
-  .badge.bg-primary,
-  [data-slot="button"],
-  [data-slot="badge"] {
-    background-color: #f59e0b !important;
-    color: #ffffff !important;
-  }
-  
-  button:not([class*="bg-"]):not([class*="text-"]) {
-    background-color: #f59e0b !important;
-    color: #ffffff !important;
-  }
-  
-  .badge:not([class*="bg-"]):not([class*="text-"]) {
-    background-color: #fef3c7 !important;
-    color: #000000 !important;
-  }
-  
-  .bg-blue-500,
-  .bg-blue-600,
-  .bg-blue-700,
-  .text-blue-500,
-  .text-blue-600,
-  .text-blue-700,
-  .border-blue-500,
-  .border-blue-600,
-  .border-blue-700 {
-    background-color: #f59e0b !important;
-    color: #ffffff !important;
-    border-color: #f59e0b !important;
-  }
-  
-  .bg-blue-100,
-  .bg-blue-200,
-  .text-blue-100,
-  .text-blue-200,
-  .border-blue-100,
-  .border-blue-200 {
-    background-color: #fef3c7 !important;
-    color: #000000 !important;
-    border-color: #fef3c7 !important;
-  }
-  
-  * {
-    --tw-bg-opacity: 1 !important;
-  }
-  
-  [style*="background-color: rgb(59, 130, 246)"],
-  [style*="background-color: rgb(37, 99, 235)"],
-  [style*="background-color: rgb(29, 78, 216)"],
-  [style*="background-color: #3b82f6"],
-  [style*="background-color: #2563eb"],
-  [style*="background-color: #1d4ed8"] {
-    background-color: #f59e0b !important;
-    color: #ffffff !important;
-  }
-  
-  [style*="background-color: rgb(219, 234, 254)"],
-  [style*="background-color: rgb(191, 219, 254)"],
-  [style*="background-color: #dbeafe"],
-  [style*="background-color: #bfdbfe"] {
-    background-color: #fef3c7 !important;
-    color: #000000 !important;
-  }
-  
-  .dashboard-badge,
-  .dashboard .badge,
-  .dashboard [class*="badge"] {
-    background-color: #f59e0b !important;
-    color: #ffffff !important;
-  }
-  
-  :root {
-    --primary: #f59e0b !important;
-    --primary-foreground: #ffffff !important;
-    --secondary: #fef3c7 !important;
-    --secondary-foreground: #000000 !important;
-  }
-  */
-  
-  /* SLEEK BADGE STYLING (EASY TO UNDO - COMMENT OUT THIS SECTION) */
-  .badge {
-    border-radius: 9999px !important; /* Pill shape */
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important; /* Subtle shadow */
-    border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Subtle border */
-    font-weight: 500 !important; /* Slightly bolder text */
-    letter-spacing: 0.025em !important; /* Better letter spacing */
-    transition: all 0.2s ease-in-out !important; /* Smooth transitions */
-  }
-  
-  .badge:hover {
-    transform: translateY(-1px) !important; /* Subtle lift on hover */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* Enhanced shadow on hover */
-  }
-  
-  /* Gradient effect for primary badges */
+  /* Badge Gradients */
   .badge[style*="background-color: #2c4170"] {
     background: linear-gradient(135deg, #2c4170 0%, #1e2f4a 100%) !important;
   }
   
-  /* Gradient effect for secondary badges */
   .badge[style*="background-color: #e6eaf7"] {
     background: linear-gradient(135deg, #e6eaf7 0%, #d1d9f0 100%) !important;
   }
 }
 
-/* Smooth sliding tab animation */
+/* Tab Animations */
 [data-state="active"] {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* Enhanced tab trigger transitions */
 [role="tab"] {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative;
 }
 
-/* Smooth background sliding effect for tabs */
 [data-orientation="horizontal"][role="tablist"] {
   position: relative;
 }
@@ -388,162 +217,11 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Fix for blurry text in dialogs */
-[data-radix-dialog-content] {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-  will-change: auto !important;
-}
-
-/* Ensure crisp text rendering in dialog content */
-[data-radix-dialog-content] * {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Specific fix for recipe builder dialog */
-.recipe-builder-dialog {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-  will-change: auto !important;
-}
-
+/* Dialog Text Rendering Fix */
+[data-radix-dialog-content],
+[data-radix-dialog-content] *,
+.recipe-builder-dialog,
 .recipe-builder-dialog * {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Fix for grid layout in recipe builder */
-.recipe-builder-dialog .grid {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Fix for product cards in recipe builder */
-.recipe-builder-dialog .p-4 {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Disable GPU acceleration for recipe builder content */
-.recipe-builder-dialog .space-y-3,
-.recipe-builder-dialog .space-y-4,
-.recipe-builder-dialog .space-y-6 {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-  will-change: auto !important;
-}
-
-/* Force hardware acceleration off for text elements */
-.recipe-builder-dialog h3,
-.recipe-builder-dialog h4,
-.recipe-builder-dialog h5,
-.recipe-builder-dialog p,
-.recipe-builder-dialog span {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-  will-change: auto !important;
-}
-
-/* Specific fix for recipe builder dialog content */
-[data-radix-dialog-content] .grid,
-[data-radix-dialog-content] .space-y-4,
-[data-radix-dialog-content] .space-y-6,
-[data-radix-dialog-content] .p-4,
-[data-radix-dialog-content] .border,
-[data-radix-dialog-content] .rounded-lg {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Fix for product cards specifically */
-[data-radix-dialog-content] .hover\:bg-muted\/50:hover {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Specific fix for recipe builder dialog */
-.recipe-builder-dialog {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-  will-change: auto !important;
-}
-
-.recipe-builder-dialog * {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Fix for grid layout in recipe builder */
-.recipe-builder-dialog .grid {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Fix for product cards in recipe builder */
-.recipe-builder-dialog .p-4 {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-/* Disable GPU acceleration for recipe builder content */
-.recipe-builder-dialog .space-y-3,
-.recipe-builder-dialog .space-y-4,
-.recipe-builder-dialog .space-y-6 {
-  transform: none !important;
-  backface-visibility: hidden !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-  will-change: auto !important;
-}
-
-/* Force hardware acceleration off for text elements */
-.recipe-builder-dialog h3,
-.recipe-builder-dialog h4,
-.recipe-builder-dialog h5,
-.recipe-builder-dialog p,
-.recipe-builder-dialog span {
   transform: none !important;
   backface-visibility: hidden !important;
   -webkit-font-smoothing: antialiased !important;

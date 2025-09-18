@@ -1,4 +1,11 @@
+# Smart Coffee - Napoleon Business Intelligence
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## 🎨 Styling Reference
+- **Perfect Card Gradient**: `linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)`
+- **Complete Styling Guide**: See `STYLING_REFERENCE.md`
+- **Color Schemes**: See `COLOR_SCHEMES.md`
 
 ## Getting Started
 

@@ -173,10 +173,10 @@ export const SmartInventoryDialog = ({
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2">
-                    <Package className="w-4 h-4 text-blue-500" />
+                    <Package className="w-4 h-4 text-[#2c4170]" />
                     <div>
                       <p className="text-sm font-medium">Total Ingredients</p>
-                      <p className="text-2xl font-bold">{mockIngredients.length}</p>
+                      <p className="text-2xl font-bold">{ingredients.length}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -209,7 +209,7 @@ export const SmartInventoryDialog = ({
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <Package className="w-4 h-4 text-blue-500" />
+                  <Package className="w-4 h-4 text-[#2c4170]" />
                   <div>
                     <p className="text-sm font-medium">Total Ingredients</p>
                     <p className="text-2xl font-bold">{mockIngredients}</p>

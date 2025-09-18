@@ -152,23 +152,23 @@ export const ProductIngredientsDialog = ({
 
           {/* Summary */}
           {recipe.length > 0 && (
-            <Card className="bg-blue-50 border-blue-200">
+            <Card className="bg-[#e6eaf7] border-[#d1d9f0]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-medium text-blue-900">Production Summary</h4>
-                    <p className="text-sm text-blue-700">
+                    <h4 className="font-medium text-[#2c4170]">Production Summary</h4>
+                    <p className="text-sm text-[#2c4170]">
                       Based on current stock levels
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-blue-900">
+                    <div className="text-2xl font-bold text-[#2c4170]">
                       {Math.min(...recipe.map(item => {
                         const ingredient = ingredients.find(ing => ing.id === item.ingredientId);
                         return ingredient ? Math.floor(ingredient.currentStock / item.quantity) : 0;
                       }))}
                     </div>
-                    <p className="text-sm text-blue-700">can be made</p>
+                    <p className="text-sm text-[#2c4170]">can be made</p>
                   </div>
                 </div>
               </CardContent>
