@@ -34,3 +34,4 @@ export interface UseFormReturn<T> {
   setError: <K extends keyof T>(key: K, error: string) => void;
   clearError: <K extends keyof T>(key: K) => void;
 }
+

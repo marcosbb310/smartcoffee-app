@@ -133,3 +133,4 @@ cp app/globals-backup.css app/globals.css
 - `app/globals.css` - Optimized version (200 lines)
 - `app/globals-backup.css` - Original backup (582 lines)
 - `app/globals-clean.css` - Clean version for reference
+

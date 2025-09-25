@@ -42,3 +42,4 @@ export interface PaginationState {
   pageSize: number;
   total: number;
 }
+

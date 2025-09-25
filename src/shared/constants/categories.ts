@@ -28,3 +28,4 @@ export const INGREDIENT_CATEGORIES = [
 
 export type ProductCategory = typeof PRODUCT_CATEGORIES[number];
 export type IngredientCategory = typeof INGREDIENT_CATEGORIES[number];
+

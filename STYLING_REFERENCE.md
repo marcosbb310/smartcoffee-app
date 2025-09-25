@@ -128,3 +128,4 @@ Use the warm beige gradient:
 - `!important` is used to override Tailwind defaults
 - Cards automatically inherit the perfect gradient through CSS selectors
 - Background maintains warm beige gradient for consistency
+

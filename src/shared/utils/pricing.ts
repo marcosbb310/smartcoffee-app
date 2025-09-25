@@ -26,3 +26,4 @@ export const formatPrice = (price: number, currency = '$'): string => {
 export const calculateTotalPrice = (items: Array<{ price: number; quantity: number }>): number => {
   return items.reduce((total, item) => total + (item.price * item.quantity), 0);
 };
+
